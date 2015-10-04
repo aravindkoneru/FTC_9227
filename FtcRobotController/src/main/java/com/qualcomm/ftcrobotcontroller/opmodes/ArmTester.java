@@ -8,51 +8,58 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 /**
  * Created by aravindkoneru on 10/4/15.
  */
-public class ArmTester extends OpMode{
 
-    public ArmTester(){
+//unstable code that has a double tap issue, but works by driving
+//the arm using encoders.
+public class armTester extends OpMode{
+
+    public armTester(){
 
     }
 
-    DcMotor climberMotorLeft,
-            climberMotorRight,
-            armMotor;
+    DcMotor leftMotor,
+            rightMotor,
+            arm;
+    int pos = 0;
+    final int inc = 10;
 
-    final int encoderStep = 10;
-
-    @Override
     public void init(){
-        climberMotorLeft = hardwareMap.dcMotor.get("m1");
-        climberMotorRight = hardwareMap.dcMotor.get("m2");
-        armMotor = hardwareMap.dcMotor.get("arm");
+        leftMotor = hardwareMap.dcMotor.get("m1");
+        rightMotor = hardwareMap.dcMotor.get("m2");
+        arm = hardwareMap.dcMotor.get("arm");
 
-        climberMotorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        climberMotorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-
-        climberMotorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        climberMotorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
-
+        leftMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rightMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
     public void loop(){
+        leftMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rightMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        float left = gamepad2.right_stick_y;
-        float arm = gamepad2.left_stick_y;
+        float armPower = gamepad2.left_stick_y;
 
-        int targetPos = climberMotorLeft.getCurrentPosition();
-        armMotor.setPower(arm);
+        float extend = gamepad2.left_trigger - gamepad2.right_trigger;
 
-        if(left > 0){
-            climberMotorLeft.setTargetPosition(targetPos + encoderStep);
-            climberMotorRight.setTargetPosition(targetPos + encoderStep);
-        } else if(left < 0){
-            climberMotorRight.setTargetPosition(targetPos - encoderStep);
-            climberMotorLeft.setTargetPosition(targetPos - encoderStep);
+        arm.setPower(armPower);
 
+        if(extend > 0){
+            pos+=inc;
+            rightMotor.setTargetPosition(inc);
+            leftMotor.setTargetPosition(inc);
+            rightMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+            leftMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
+
+        } else if(extend < 0){
+            pos-=inc;
+            rightMotor.setTargetPosition(-inc);
+            leftMotor.setTargetPosition(-inc);
+            rightMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+            leftMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         }
 
+        rightMotor.setPower(0.3);
+        leftMotor.setPower(0.3);
     }
-
 
 }
