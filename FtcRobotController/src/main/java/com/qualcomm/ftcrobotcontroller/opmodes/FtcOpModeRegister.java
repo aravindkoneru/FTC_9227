@@ -42,6 +42,7 @@ public class FtcOpModeRegister implements OpModeRegister {
   public void register(OpModeManager manager) {
 
     manager.register("NullOp", NullOp.class);
+    manager.register("ArmTester", ArmTester.class);
     manager.register("MainTeleOp", MainTeleOp.class);
     manager.register("EncoderTester", EncoderTester.class);
 
