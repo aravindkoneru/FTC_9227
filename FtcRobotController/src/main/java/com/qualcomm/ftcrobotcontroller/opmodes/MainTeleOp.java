@@ -34,36 +34,11 @@ public class MainTeleOp extends OpMode {
 
     @Override
     public void loop() {
+        float left = gamepad1.left_stick_y;
+        float right = gamepad1.right_stick_y;
 
-        if (!gamepad1.a) {
-
-            //get the controller values from the controller
-            float leftStick = gamepad1.left_stick_y;
-            float rightStick = gamepad1.right_stick_y;
-
-            if (gamepad1.x) { //pivot turn
-                //setLeftPower(-.5);
-                //setRightPower(.5);
-            
-            } else if (gamepad1.y) { //arc turn
-               
-                //setLeftPower(.5);
-            } else { //normal tank drive
-                if(leftStick > 0 && rightStick > 0) {
-//                    setLeftPower(leftStick + .3);
-//                    setRightPower(rightStick + .3);
-                } else {
-                    setLeftPower(leftStick);
-                    setRightPower(rightStick);
-                }
-
-            }
-        } else {
-            setLeftPower(0);
-            setRightPower(0);
-        }
-
-
+        setLeftPower(left);
+        setRightPower(right);
     }
     public void setLeftPower(float power){
         motorLeft1.setPower(scaleInput(power));
