@@ -50,6 +50,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("ArmButtons", armButtonTester.class);
 
     //driving
+    manager.register("treadDrive", treadDrive.class);
     manager.register("MainTeleOp", MainTeleOp.class);
 
   }
