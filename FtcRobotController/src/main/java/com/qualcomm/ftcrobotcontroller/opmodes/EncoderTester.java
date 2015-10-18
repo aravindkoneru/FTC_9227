@@ -1,100 +1,101 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-<<<<<<< HEAD
-=======
-import java.sql.ResultSet;
 
-
->>>>>>> 76717865609accd2ba054b240d8936c04f9c04de
-/**
- * Created by aravindkoneru on 9/20/15.
- */
 public class EncoderTester extends OpMode {
+    //gyroTest gt;
 
-    DcMotor motorRight1, motorRight2;
-    DcMotor motorLeft1, motorLeft2;
+    DcMotor l1, r1, l2, r2;
 
-    public EncoderTester(){
+    final double ticksPerRotation = 1200;
+    final double inchesPerRotation = 4 * Math.PI;
+    double distance = 20;
+    double rotations = ticksPerRotation*(distance/inchesPerRotation);
+    final double tolerance = 100;
 
-    }
-
-    @Override
-    public void init(){
-        motorRight1 = hardwareMap.dcMotor.get("r1");
-        motorRight2 = hardwareMap.dcMotor.get("r2");
-
-<<<<<<< HEAD
-        motorRight1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
-
-=======
->>>>>>> 76717865609accd2ba054b240d8936c04f9c04de
-        motorLeft1 = hardwareMap.dcMotor.get("l1");
-        motorLeft2 = hardwareMap.dcMotor.get("l2");
-
-        motorLeft1.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft2.setDirection(DcMotor.Direction.REVERSE);
-
-<<<<<<< HEAD
-        motorLeft1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-=======
-        resetEnc();
-    }
-
-    public void resetEnc()
-    {
-        motorLeft1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorRight1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-
-        motorLeft1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
->>>>>>> 76717865609accd2ba054b240d8936c04f9c04de
+    public EncoderTester() {
 
     }
 
-    public void positionRight(int position){
-        motorRight1.setTargetPosition(position);
-        motorRight2.setTargetPosition(position);
+    public void init() {
+        l1 = hardwareMap.dcMotor.get("l1");
+        l2 = hardwareMap.dcMotor.get("l2");
+        r1 = hardwareMap.dcMotor.get("r1");
+        r2 = hardwareMap.dcMotor.get("r2");
+
+        l1.setDirection(DcMotor.Direction.REVERSE);
+        l2.setDirection(DcMotor.Direction.REVERSE);
+
+        setReset();
+        setToRun();
+
+        SetPowerLeft(.10);
+        SetPowerRight(.10);
     }
 
-    public void positionLeft(int position){
-        motorLeft1.setTargetPosition(position);
-        motorLeft2.setTargetPosition(position);
+    public void setToRun(){
+        r1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        r2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        l1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        l2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    @Override
-    public void loop(){
+    public void setReset(){
+        r1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        r2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        l1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        l2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    }
 
-        if(gamepad1.a){
-            positionLeft(5000);
-            positionRight(5000);
+    public void SetPowerRight(double Power){
+        r1.setPower(Power);
+        r2.setPower(Power);
+
+    }
+    public void SetPowerLeft(double Power){
+        l1.setPower(Power);
+        l2.setPower(Power);
+    }
+
+    public int getAvgRight(){
+        int avgR = r1.getCurrentPosition() + r2.getCurrentPosition();
+        avgR /= 2;
+        return (int)avgR;
+    }
+
+    public int getAvgLeft(){
+        int avgL = l1.getCurrentPosition() + l2.getCurrentPosition();
+        avgL /= 2;
+        return avgL;
+    }
+
+
+    public void loop() {
+
+        r1.setTargetPosition((int) (-rotations));
+        r2.setTargetPosition((int) (-rotations));
+        l1.setTargetPosition((int) (-rotations));
+        l2.setTargetPosition((int) (-rotations));
+
+        if(Math.abs(getAvgLeft()-rotations) <= tolerance){
+            stop();
         }
 
-        if(gamepad1.x){
-            positionRight(-5000);
-            positionLeft(-5000);
+        else if(Math.abs(getAvgRight() - rotations) <= tolerance){
+            stop();
         }
 
-        telemetry.addData("RIGHT1 ENCODER: ", motorRight1.getCurrentPosition());
-        telemetry.addData("RIGHT2 ENCODER: ", motorRight2.getCurrentPosition());
-
-        telemetry.addData("LEFT1 ENCODER: ", motorLeft1.getCurrentPosition());
-        telemetry.addData("LEFT2 ENCODER: ", motorLeft2.getCurrentPosition());
+        telemetry.addData("Right1 Encoder: ", r1.getCurrentPosition());
+        telemetry.addData("Right2 Encoder: ", r2.getCurrentPosition());
+        telemetry.addData("Left1 Encoder: ", l1.getCurrentPosition());
+        telemetry.addData("Left2 Encoder: ", l2.getCurrentPosition());
     }
 
-    @Override
-    public void stop(){
+    public void stop() {
+        SetPowerLeft(0);
+        SetPowerRight(0);
 
     }
-
 }
