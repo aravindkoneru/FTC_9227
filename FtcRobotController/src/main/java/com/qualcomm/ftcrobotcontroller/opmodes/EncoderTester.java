@@ -4,15 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
+<<<<<<< HEAD
+=======
+import java.sql.ResultSet;
+
+
+>>>>>>> 76717865609accd2ba054b240d8936c04f9c04de
 /**
  * Created by aravindkoneru on 9/20/15.
  */
 public class EncoderTester extends OpMode {
 
-    DcMotor motorRight1,
-            motorRight2;
-    DcMotor motorLeft1,
-            motorLeft2;
+    DcMotor motorRight1, motorRight2;
+    DcMotor motorLeft1, motorLeft2;
 
     public EncoderTester(){
 
@@ -23,18 +27,38 @@ public class EncoderTester extends OpMode {
         motorRight1 = hardwareMap.dcMotor.get("r1");
         motorRight2 = hardwareMap.dcMotor.get("r2");
 
+<<<<<<< HEAD
         motorRight1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         motorRight2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
 
+=======
+>>>>>>> 76717865609accd2ba054b240d8936c04f9c04de
         motorLeft1 = hardwareMap.dcMotor.get("l1");
         motorLeft2 = hardwareMap.dcMotor.get("l2");
 
         motorLeft1.setDirection(DcMotor.Direction.REVERSE);
         motorLeft2.setDirection(DcMotor.Direction.REVERSE);
 
+<<<<<<< HEAD
         motorLeft1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+=======
+        resetEnc();
+    }
+
+    public void resetEnc()
+    {
+        motorLeft1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        motorLeft2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        motorRight1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        motorRight2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+        motorLeft1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+>>>>>>> 76717865609accd2ba054b240d8936c04f9c04de
 
     }
 

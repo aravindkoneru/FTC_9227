@@ -40,6 +40,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 public class FtcOpModeRegister implements OpModeRegister {
 
   public void register(OpModeManager manager) {
+<<<<<<< HEAD
+      manager.register("NullOp", NullOp.class);
+      manager.register("ArmTester", ArmTester.class);
+      manager.register("ArmTesterEncoder", ArmTesterEncoder.class);
+      manager.register("MainTeleOp", MainTeleOp.class);
+      manager.register("EncoderTester", EncoderTester.class);
+=======
 
       manager.register("NullOp", NullOp.class);
 
@@ -52,5 +59,6 @@ public class FtcOpModeRegister implements OpModeRegister {
       //driving
       manager.register("MainTeleOp", MainTeleOp.class);
 
+>>>>>>> 14a9e458c95bee7cb3a56fe3d9bc6a75d844e1af
   }
 }
