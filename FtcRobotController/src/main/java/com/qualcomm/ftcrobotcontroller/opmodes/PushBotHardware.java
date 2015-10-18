@@ -499,9 +499,7 @@ public class PushBotHardware extends OpMode
         // Ensure the specifiec value is legal.
         //
         double l_position = Range.clip
-            ( p_position
-            , Servo.MIN_POSITION
-            , Servo.MAX_POSITION
+            ( p_position, Servo.MIN_POSITION, Servo.MAX_POSITION
             );
 
         //
