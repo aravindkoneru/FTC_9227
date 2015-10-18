@@ -36,6 +36,11 @@ public class MainTeleOp extends OpMode {
     @Override
     public void loop() {
 
+        telemetry.addData("R1 Encoder", motorRight1.getCurrentPosition());
+        telemetry.addData("l1 Encoder", motorLeft1.getCurrentPosition());
+        telemetry.addData("R2 Encoder", motorRight2.getCurrentPosition());
+        telemetry.addData("L2 Encoder", motorLeft2.getCurrentPosition());
+
             //get the controller values from the controller
             float leftStick = gamepad1.left_stick_y;
             float rightStick = gamepad1.right_stick_y;
@@ -53,6 +58,7 @@ public class MainTeleOp extends OpMode {
         motorRight1.setPower(scaleInput(power));
         motorRight2.setPower(scaleInput(power));
     }
+
 
     @Override
     public void stop() {
