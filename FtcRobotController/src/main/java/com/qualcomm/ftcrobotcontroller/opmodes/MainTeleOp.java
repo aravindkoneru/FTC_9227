@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
+
 public class MainTeleOp extends OpMode {
 
     DcMotor motorRight1,
@@ -34,14 +35,14 @@ public class MainTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        float left = gamepad1.left_stick_y;
-        float right = -gamepad1.right_stick_y;
 
-        setLeftPower(left);
-        setRightPower(right);
+            //get the controller values from the controller
+            float leftStick = gamepad1.left_stick_y;
+            float rightStick = gamepad1.right_stick_y;
 
-        telemetry.addData("left", left);
-        telemetry.addData("right", right);
+            setLeftPower(leftStick);
+            setRightPower(rightStick);
+
     }
     public void setLeftPower(float power){
         motorLeft1.setPower(scaleInput(power));

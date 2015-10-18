@@ -8,10 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 /**
  * Created by aravindkoneru on 10/4/15.
  */
-
-//r trigger and l trigger control the climber
-//the left joystick controls the arm
-
 public class armTesterManual extends OpMode{
 
     public armTesterManual(){

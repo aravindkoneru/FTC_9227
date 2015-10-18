@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-
 /**
  * Created by aravindkoneru on 9/20/15.
  */
@@ -24,8 +23,8 @@ public class EncoderTester extends OpMode {
         motorRight1 = hardwareMap.dcMotor.get("r1");
         motorRight2 = hardwareMap.dcMotor.get("r2");
 
-        motorRight1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
 
         motorLeft1 = hardwareMap.dcMotor.get("l1");
@@ -34,8 +33,8 @@ public class EncoderTester extends OpMode {
         motorLeft1.setDirection(DcMotor.Direction.REVERSE);
         motorLeft2.setDirection(DcMotor.Direction.REVERSE);
 
-        motorLeft1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
     }
 

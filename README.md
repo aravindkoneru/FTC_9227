@@ -1,8 +1,3 @@
-#FTC 9227 Code
----
+#FTC 9042
 
-This repo contains all of the working code from FTC-9227 and will constantly be updated to include
-the latest version of code. Feel free to comment, review,
-fork, and raise issues. 
-
-Good Luck this Season!
+The official code repo for FTC 9042. 
