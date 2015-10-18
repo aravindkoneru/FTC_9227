@@ -49,10 +49,16 @@ public class FtcOpModeRegister implements OpModeRegister {
 =======
 
     manager.register("NullOp", NullOp.class);
-    manager.register("ArmTesterEncoder", armTester.class);
+
+    //the arm
+    manager.register("ArmTester", armTester.class);
     manager.register("ArmTesterManual", armTesterManual.class);
+    manager.register("ArmDist", armDist.class);
+    manager.register("ArmButtons", armButtonTester.class);
+
+    //driving
+    manager.register("treadDrive", treadDrive.class);
     manager.register("MainTeleOp", MainTeleOp.class);
-    manager.register("EncoderTester", EncoderTester.class);
 
 >>>>>>> 14a9e458c95bee7cb3a56fe3d9bc6a75d844e1af
   }

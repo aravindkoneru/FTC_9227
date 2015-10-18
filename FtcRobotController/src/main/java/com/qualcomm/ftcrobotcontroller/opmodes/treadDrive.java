@@ -4,32 +4,24 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-public class MainTeleOp extends OpMode {
+public class treadDrive extends OpMode {
 
-    DcMotor motorRight1,
-            motorRight2;
-    DcMotor motorLeft1,
-            motorLeft2;
+    DcMotor motorRight1;
+    DcMotor motorLeft1;
 
     /**
      * Constructor
      */
 
-    public MainTeleOp(){
+    public treadDrive(){
 
     }
 
     @Override
     public void init() {
-
         motorRight1 = hardwareMap.dcMotor.get("r1");
-        motorRight2 = hardwareMap.dcMotor.get("r2");
 
         motorLeft1 = hardwareMap.dcMotor.get("l1");
-        motorLeft2 = hardwareMap.dcMotor.get("l2");
-
-        motorLeft1.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft2.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -45,12 +37,10 @@ public class MainTeleOp extends OpMode {
     }
     public void setLeftPower(float power){
         motorLeft1.setPower(scaleInput(power));
-        motorLeft2.setPower(scaleInput(power));
     }
 
     public void setRightPower(float power){
         motorRight1.setPower(scaleInput(power));
-        motorRight2.setPower(scaleInput(power));
     }
 
     @Override
