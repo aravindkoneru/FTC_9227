@@ -30,6 +30,11 @@ public class ResetEncoders extends OpMode {
         r2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         l1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         l2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
+        telemetry.addData("current encoder value r1", r1.getCurrentPosition());
+        telemetry.addData("current encoder value r1", l1.getCurrentPosition());
+        telemetry.addData("current encoder value r1", l2.getCurrentPosition());
+        telemetry.addData("current encoder value r1", r2.getCurrentPosition());
     }
 
     @Override

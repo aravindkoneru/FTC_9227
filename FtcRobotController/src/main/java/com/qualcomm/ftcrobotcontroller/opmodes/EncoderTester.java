@@ -9,11 +9,12 @@ public class EncoderTester extends OpMode {
 
     DcMotor l1, r1, l2, r2;
 
-    final double ticksPerRotation = 1200;
-    final double inchesPerRotation = 4 * Math.PI;
+    final double TICKS_PER_ROTATION = 1200/1.05;
+    final double INCHES_PER_ROTATION = 4 * Math.PI;
     double distance = 20;
-    double rotations = ticksPerRotation*(distance/inchesPerRotation);
-    final double tolerance = 100;
+    double rotations = TICKS_PER_ROTATION*(distance/INCHES_PER_ROTATION);
+    final double TOLERANCE = 500;
+    boolean stopped = false;
 
     public EncoderTester() {
 
@@ -31,8 +32,8 @@ public class EncoderTester extends OpMode {
         setReset();
         setToRun();
 
-        SetPowerLeft(.10);
-        SetPowerRight(.10);
+        setPowerLeft(.40);
+        setPowerRight(.40);
     }
 
     public void setToRun(){
@@ -49,24 +50,24 @@ public class EncoderTester extends OpMode {
         l2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
-    public void SetPowerRight(double Power){
+    public void setPowerRight(double Power){
         r1.setPower(Power);
         r2.setPower(Power);
 
     }
-    public void SetPowerLeft(double Power){
+    public void setPowerLeft(double Power){
         l1.setPower(Power);
         l2.setPower(Power);
     }
 
-    public int getAvgRight(){
-        int avgR = r1.getCurrentPosition() + r2.getCurrentPosition();
+    public double getAvgRight(){
+        double avgR = r1.getCurrentPosition() + r2.getCurrentPosition();
         avgR /= 2;
         return (int)avgR;
     }
 
-    public int getAvgLeft(){
-        int avgL = l1.getCurrentPosition() + l2.getCurrentPosition();
+    public double getAvgLeft(){
+        double avgL = l1.getCurrentPosition() + l2.getCurrentPosition();
         avgL /= 2;
         return avgL;
     }
@@ -74,19 +75,33 @@ public class EncoderTester extends OpMode {
 
     public void loop() {
 
-        r1.setTargetPosition((int) (-rotations));
-        r2.setTargetPosition((int) (-rotations));
-        l1.setTargetPosition((int) (-rotations));
-        l2.setTargetPosition((int) (-rotations));
+        //setToRun();
 
-        if(Math.abs(getAvgLeft()-rotations) <= tolerance){
+        if(Math.abs(Math.abs(getAvgLeft()) - rotations) <= TOLERANCE){
+            setReset();
+            stopped = true;
             stop();
         }
 
-        else if(Math.abs(getAvgRight() - rotations) <= tolerance){
+        else if(Math.abs(Math.abs(getAvgRight()) - rotations) <= TOLERANCE){
+            setReset();
+            stopped = true;
             stop();
         }
 
+        if(!stopped) {
+            r1.setTargetPosition((int) (-rotations));
+            r2.setTargetPosition((int) (-rotations));
+            l1.setTargetPosition((int) (-rotations));
+            l2.setTargetPosition((int) (-rotations));
+        }
+        else{
+            setPowerLeft(0);
+            setPowerRight(0);
+        }
+
+        telemetry.addData("value of Tolerance Left", (Math.abs(Math.abs(getAvgLeft()) - rotations)));
+        telemetry.addData("value of Tolerance Right", (Math.abs(Math.abs(getAvgRight()) - rotations)));
         telemetry.addData("Right1 Encoder: ", r1.getCurrentPosition());
         telemetry.addData("Right2 Encoder: ", r2.getCurrentPosition());
         telemetry.addData("Left1 Encoder: ", l1.getCurrentPosition());
@@ -94,8 +109,16 @@ public class EncoderTester extends OpMode {
     }
 
     public void stop() {
-        SetPowerLeft(0);
-        SetPowerRight(0);
+
+        //setReset();
+
+        l1.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        l2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        r1.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        r2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+
+        setPowerLeft(0);
+        setPowerRight(0);
 
     }
 }
