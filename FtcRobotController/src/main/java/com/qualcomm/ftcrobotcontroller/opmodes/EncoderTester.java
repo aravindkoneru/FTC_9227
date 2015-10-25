@@ -53,7 +53,6 @@ public class EncoderTester extends OpMode {
     public void setPowerRight(double Power){
         r1.setPower(Power);
         r2.setPower(Power);
-
     }
     public void setPowerLeft(double Power){
         l1.setPower(Power);
