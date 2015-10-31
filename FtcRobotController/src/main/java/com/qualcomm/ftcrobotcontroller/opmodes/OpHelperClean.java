@@ -24,7 +24,8 @@ public class OpHelperClean extends OpMode {
 
     //currently placeholders, was told they would be needed
     DcMotor armMotor1,
-            armMotor2;
+            armMotor2,
+            armPivot;
 
     Servo zipLiner;
 
@@ -43,7 +44,7 @@ public class OpHelperClean extends OpMode {
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
-            TICKS_PER_ROTATION = 1200/1.06,
+            TICKS_PER_ROTATION = 1200/1.05,
             TICKS_PER_INCH = TICKS_PER_ROTATION/CIRCUMFERENCE_INCHES,
             TOLERANCE = 10;
 
@@ -59,6 +60,7 @@ public class OpHelperClean extends OpMode {
         frontRight = hardwareMap.dcMotor.get("r1");
         backRight = hardwareMap.dcMotor.get("r2");
 
+        armPivot = hardwareMap.dcMotor.get("arm");
         setDirection(); //ensures the proper motor directions
 
         resetEncoders(); //ensures that the encoders have reset
@@ -80,9 +82,11 @@ public class OpHelperClean extends OpMode {
         if(backRight.getDirection() == DcMotor.Direction.FORWARD){
             backRight.setDirection(DcMotor.Direction.REVERSE);
         }
+
+        //TODO configure arm motor direction
     }
 
-    public boolean resetEncoders(){
+    public boolean resetEncoders() {
         frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
@@ -90,7 +94,6 @@ public class OpHelperClean extends OpMode {
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         flag = 1;
-
 
 
         return (frontLeft.getCurrentPosition() == 0 &&
@@ -185,19 +188,23 @@ public class OpHelperClean extends OpMode {
         SERVO
     }
 
-    public void clipValues(double initialValue, ComponentType type)
-    {
+    public double clipValues(double initialValue, ComponentType type) {
+        double finalval=0;
         if (type == ComponentType.MOTOR)
-            Range.clip(initialValue, MOTOR_MIN, MOTOR_MAX);
+            finalval =  Range.clip(initialValue, MOTOR_MIN, MOTOR_MAX);
         if (type == ComponentType.SERVO)
-            Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
-        //return 0;
+            finalval= Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
+        return finalval;
     }
 
 
     public boolean setServo(double pos){//only accepts a clipped value
         zipLiner.setPosition(pos);
         return true;
+    }
+
+    public void setArmPivot(double power){
+        armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
 
     public void manualDrive(){

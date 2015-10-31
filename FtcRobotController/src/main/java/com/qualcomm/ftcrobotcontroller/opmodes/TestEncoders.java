@@ -5,7 +5,6 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 public class TestEncoders extends OpHelperClean{
 
-    boolean debug;
 
     enum RunState{
         RESET_STATE,
@@ -23,10 +22,6 @@ public class TestEncoders extends OpHelperClean{
 
     @Override
     public void loop() {
-        if(gamepad1.a){
-            debug=true;
-        }
-
 
 
         basicTel();
@@ -40,12 +35,9 @@ public class TestEncoders extends OpHelperClean{
             }
             case FIRST_STATE:
             {
-                //setTargetValueMotor(10,10);
 
                 if(runStraight(10) )//&& debug)
                 {
-                    //resetEncoders();
-                    //debug = false;
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -59,13 +51,11 @@ public class TestEncoders extends OpHelperClean{
             }
             case SECOND_STATE:
             {
-                //setTargetValueMotor(5,5);
-
-                if(runStraight(12))// && debug)
-                {
+//                if(runStraight(12))// && debug)
+//                {
                 //    resetEncoders();
                     rs = RunState.LAST_STATE;
-                }
+//                }
                 break;
             }
 
@@ -73,8 +63,6 @@ public class TestEncoders extends OpHelperClean{
             {
                 telemetry.addData("END", 10);
             }
-
-
         }
     }
 }
