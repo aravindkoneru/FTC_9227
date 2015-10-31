@@ -6,15 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-
-//TODO Talk to Tim about structure/organization
-
 /**
  * Created by aravindkoneru on 10/28/15.
  */
 public class OpHelperClean extends OpMode {
 
-    int bullshit = 0;
+    int resetStatus = 0;
 
     DcMotor frontLeft,
             backLeft;
@@ -89,7 +86,7 @@ public class OpHelperClean extends OpMode {
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        bullshit = 1;
+        resetStatus = 1;
 
 
 
@@ -113,7 +110,7 @@ public class OpHelperClean extends OpMode {
     }
 
     public void setToEncoderMode(){
-        bullshit = 0;
+        resetStatus = 0;
 
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -176,7 +173,7 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("backRightPos: ", backRight.getCurrentPosition());
         telemetry.addData("RightTarget: ", rightTarget);
 
-        telemetry.addData("RESET ENCODERS", bullshit);
+        telemetry.addData("RESET ENCODERS", resetStatus);
     }
 
     enum ComponentType{         //helps with clipValues
