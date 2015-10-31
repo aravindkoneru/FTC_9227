@@ -10,12 +10,13 @@ public class TestEncoders extends OpHelperClean{
         FIRST_STATE,
         SECOND_STATE,
         THIRD_STATE,
-        FOURTH_STATE
+        FOURTH_STATE,
+        LAST_STATE
     }
 
     private RunState rs = RunState.RESET_STATE;
-    public TestEncoders()
-    {}
+    public TestEncoders() {}
+
 
     @Override
     public void loop() {
@@ -30,26 +31,33 @@ public class TestEncoders extends OpHelperClean{
             }
             case FIRST_STATE:
             {
-                setTargetValueMotor(10,10);
+                //setTargetValueMotor(10,10);
 
-                if(hasReached())
+                if(runStraight(10))
                 {
-                    rs = RunState.SECOND_STATE;
                     resetEncoders();
+                    rs = RunState.SECOND_STATE;
                 }
                 break;
             }
-//            case SECOND_STATE:
-//            {
-//                setTargetValueMotor(5,5);
-//
-//                if(hasReached())
-//                {
-//                    rs = RunState.THIRD_STATE;
-//                    resetEncoders();
-//                }
-//                break;
-//            }
+            case SECOND_STATE:
+            {
+                //setTargetValueMotor(5,5);
+
+                if(runStraight(15))
+                {
+                    resetEncoders();
+                    rs = RunState.LAST_STATE;
+                }
+                break;
+            }
+
+            case LAST_STATE:
+            {
+                telemetry.addData("FUCK YOU", 10);
+            }
+
+
         }
     }
 }

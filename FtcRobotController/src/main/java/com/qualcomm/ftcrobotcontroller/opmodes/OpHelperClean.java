@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class OpHelperClean extends OpMode {
 
+    int bullshit = 0;
+
     DcMotor frontLeft,
             backLeft;
 
@@ -25,10 +27,6 @@ public class OpHelperClean extends OpMode {
             armMotor2;
 
     Servo zipLiner;
-
-    DcMotorController leftController,
-            rightController,
-            armController;//currently a placeholder, was told it would be needed
 
     //are these needed?
     private int rightTarget,
@@ -55,11 +53,9 @@ public class OpHelperClean extends OpMode {
     }
 
     public void init(){
-        leftController = hardwareMap.dcMotorController.get("leftController");
         frontLeft = hardwareMap.dcMotor.get("l1");
         backLeft = hardwareMap.dcMotor.get("l2");
 
-        rightController = hardwareMap.dcMotorController.get("rightController");
         frontRight = hardwareMap.dcMotor.get("r1");
         backRight = hardwareMap.dcMotor.get("r2");
 
@@ -93,6 +89,10 @@ public class OpHelperClean extends OpMode {
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
+        bullshit = 1;
+
+
+
 //        return (frontLeft.getCurrentPosition() == 0 &&
 //                backLeft.getCurrentPosition() == 0 &&
 //                frontRight.getCurrentPosition() == 0 &&
@@ -112,6 +112,8 @@ public class OpHelperClean extends OpMode {
     }
 
     public void setToEncoderMode(){
+        bullshit = 0;
+
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
@@ -128,10 +130,10 @@ public class OpHelperClean extends OpMode {
         backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-    public boolean runStraight(double distance_in_inches) {              //Sets values for driving straight, and indicates completion
+    public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget = leftTarget;
-        setTargetValueMotor(leftTarget, rightTarget);
+        setTargetValueMotor();
 
         setPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
@@ -143,7 +145,7 @@ public class OpHelperClean extends OpMode {
         return false;
     }
 
-    public void setTargetValueMotor(int leftTarget, int rightTarget){
+    public void setTargetValueMotor(){
         frontLeft.setTargetPosition(leftTarget);
         backLeft.setTargetPosition(leftTarget);
 
@@ -167,11 +169,13 @@ public class OpHelperClean extends OpMode {
     public void basicTel(){
         telemetry.addData("frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("backLeftPos: ", backLeft.getCurrentPosition());
-        telemetry.addData("LeftTargetTarg: ", leftTarget);
+        telemetry.addData("LeftTarget: ", leftTarget);
 
         telemetry.addData("frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("backRightPos: ", backRight.getCurrentPosition());
-        telemetry.addData("RightTargetTarg: ", rightTarget);
+        telemetry.addData("RightTarget: ", rightTarget);
+
+        telemetry.addData("RESET ENCODERS", bullshit);
     }
 
     enum ComponentType{         //helps with clipValues
@@ -204,6 +208,8 @@ public class OpHelperClean extends OpMode {
 
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
+
+
     }
 
     public void loop(){
