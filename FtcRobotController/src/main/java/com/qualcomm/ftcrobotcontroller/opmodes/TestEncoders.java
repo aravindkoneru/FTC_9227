@@ -54,7 +54,7 @@ public class TestEncoders extends OpHelperClean{
 
             case LAST_STATE:
             {
-                telemetry.addData("FUCK YOU", 10);
+//                telemetry.addData("FUCK YOU", 10);
             }
 
 

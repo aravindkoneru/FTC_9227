@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class OpHelperClean extends OpMode {
 
-    int bullshit = 0;
+    int flag = 0;
 
     DcMotor frontLeft,
             backLeft;
@@ -89,7 +89,7 @@ public class OpHelperClean extends OpMode {
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        bullshit = 1;
+        flag = 1;
 
 
 
@@ -113,7 +113,7 @@ public class OpHelperClean extends OpMode {
     }
 
     public void setToEncoderMode(){
-        bullshit = 0;
+        flag = 0;
 
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -176,7 +176,7 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("backRightPos: ", backRight.getCurrentPosition());
         telemetry.addData("RightTarget: ", rightTarget);
 
-        telemetry.addData("RESET ENCODERS", bullshit);
+        telemetry.addData("RESET ENCODERS", flag);
     }
 
     enum ComponentType{         //helps with clipValues
@@ -209,8 +209,6 @@ public class OpHelperClean extends OpMode {
 
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
-
-
     }
 
     public void loop(){
