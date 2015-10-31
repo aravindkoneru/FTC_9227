@@ -82,7 +82,7 @@ public class OpHelperClean extends OpMode {
         }
     }
 
-    public void resetEncoders(){
+    public boolean resetEncoders(){
         frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
@@ -93,10 +93,10 @@ public class OpHelperClean extends OpMode {
 
 
 
-//        return (frontLeft.getCurrentPosition() == 0 &&
-//                backLeft.getCurrentPosition() == 0 &&
-//                frontRight.getCurrentPosition() == 0 &&
-//                backRight.getCurrentPosition() == 0);
+        return (frontLeft.getCurrentPosition() == 0 &&
+                backLeft.getCurrentPosition() == 0 &&
+                frontRight.getCurrentPosition() == 0 &&
+                backRight.getCurrentPosition() == 0);
 
     }
 
@@ -113,7 +113,7 @@ public class OpHelperClean extends OpMode {
     }
 
     public void setToEncoderMode(){
-        flag = 0;
+        flag=0;
 
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
