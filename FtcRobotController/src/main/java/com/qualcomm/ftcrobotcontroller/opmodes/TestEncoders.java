@@ -30,8 +30,7 @@ public class TestEncoders extends OpHelperClean{
             }
             case FIRST_STATE:
             {
-                setTargetValueMotor(10,10);
-
+                runStraight(10);
                 if(hasReached())
                 {
                     rs = RunState.SECOND_STATE;

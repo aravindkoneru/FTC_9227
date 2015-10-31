@@ -26,11 +26,6 @@ public class OpHelperClean extends OpMode {
 
     Servo zipLiner;
 
-    DcMotorController leftController,
-            rightController,
-            armController;//currently a placeholder, was told it would be needed
-
-    //are these needed?
     private int rightTarget,
             leftTarget;
 
@@ -55,11 +50,9 @@ public class OpHelperClean extends OpMode {
     }
 
     public void init(){
-        leftController = hardwareMap.dcMotorController.get("leftController");
         frontLeft = hardwareMap.dcMotor.get("l1");
         backLeft = hardwareMap.dcMotor.get("l2");
 
-        rightController = hardwareMap.dcMotorController.get("rightController");
         frontRight = hardwareMap.dcMotor.get("r1");
         backRight = hardwareMap.dcMotor.get("r2");
 
@@ -92,11 +85,6 @@ public class OpHelperClean extends OpMode {
 
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-
-//        return (frontLeft.getCurrentPosition() == 0 &&
-//                backLeft.getCurrentPosition() == 0 &&
-//                frontRight.getCurrentPosition() == 0 &&
-//                backRight.getCurrentPosition() == 0);
     }
 
     //TODO: Implement cheesy drive or special drive code?
