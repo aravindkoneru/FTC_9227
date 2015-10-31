@@ -28,7 +28,7 @@ public class OpHelperClean extends OpMode {
 
     Servo zipLiner;
 
-    //are these needed?
+
     private int rightTarget,
             leftTarget;
 
@@ -97,6 +97,7 @@ public class OpHelperClean extends OpMode {
 //                backLeft.getCurrentPosition() == 0 &&
 //                frontRight.getCurrentPosition() == 0 &&
 //                backRight.getCurrentPosition() == 0);
+
     }
 
     //TODO: Implement cheesy drive or special drive code?
