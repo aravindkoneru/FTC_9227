@@ -48,6 +48,8 @@ public class MainTeleOp extends OpMode {
             setLeftPower(leftStick);
             setRightPower(rightStick);
 
+
+
     }
     public void setLeftPower(float power){
         motorLeft1.setPower(scaleInput(power));
