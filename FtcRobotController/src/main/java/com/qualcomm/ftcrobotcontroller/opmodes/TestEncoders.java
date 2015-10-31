@@ -54,8 +54,8 @@ public class TestEncoders extends OpHelperClean{
 
             case LAST_STATE:
             {
-                telemetry.addData("Last_State", 10);
-            }
+                telemetry.addData("Last State Reached", 1);
+           }
         }
     }
 }
