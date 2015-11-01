@@ -1,11 +1,11 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.ftcrobotcontroller.BuildConfig;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+
 /**
  * Created by aravindkoneru on 10/28/15.
  */
@@ -32,26 +32,26 @@ public class OpHelperClean extends OpMode {
             leftTarget;
 
     //SERVO CONSTANTS
-    private final double SERVO_MAX=1,
-            SERVO_MIN=-1,
-            SERVO_NEUTRAL = 9.0/17;      //Stops the continuous servo
+    private final double SERVO_MAX = 1,
+            SERVO_MIN = - 1,
+            SERVO_NEUTRAL = 9.0 / 17;      //Stops the continuous servo
 
     //MOTOR RANGES
-    private final double MOTOR_MAX=1,
-            MOTOR_MIN=-1;
+    private final double MOTOR_MAX = 1,
+            MOTOR_MIN = - 1;
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
-    private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
-            TICKS_PER_ROTATION = 1200/1.05,
-            TICKS_PER_INCH = TICKS_PER_ROTATION/CIRCUMFERENCE_INCHES,
+    private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
+            TICKS_PER_ROTATION = 1200 / 1.05,
+            TICKS_PER_INCH = TICKS_PER_ROTATION / CIRCUMFERENCE_INCHES,
             TOLERANCE = 10;
 
 
-    public OpHelperClean(){
+    public OpHelperClean() {
 
     }
 
-    public void init(){
+    public void init() {
         frontLeft = hardwareMap.dcMotor.get("l1");
         backLeft = hardwareMap.dcMotor.get("l2");
 
@@ -67,19 +67,19 @@ public class OpHelperClean extends OpMode {
     }
 
     //sets the proper direction for the motors
-    public void setDirection(){
-        if(frontLeft.getDirection() == DcMotor.Direction.REVERSE){
+    public void setDirection() {
+        if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) {
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
         }
-        if(backLeft.getDirection() == DcMotor.Direction.REVERSE){
+        if (backLeft.getDirection() == DcMotor.Direction.REVERSE) {
             backLeft.setDirection(DcMotor.Direction.FORWARD);
         }
 
-        if(frontRight.getDirection() == DcMotor.Direction.FORWARD){
+        if (frontRight.getDirection() == DcMotor.Direction.FORWARD) {
             frontRight.setDirection(DcMotor.Direction.REVERSE);
         }
 
-        if(backRight.getDirection() == DcMotor.Direction.FORWARD){
+        if (backRight.getDirection() == DcMotor.Direction.FORWARD) {
             backRight.setDirection(DcMotor.Direction.REVERSE);
         }
 
@@ -93,7 +93,7 @@ public class OpHelperClean extends OpMode {
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-       flag = 1;
+        flag = 1;
 
 
         return (frontLeft.getCurrentPosition() == 0 &&
@@ -104,7 +104,7 @@ public class OpHelperClean extends OpMode {
     }
 
     //TODO: Implement cheesy drive or special drive code?
-    public void setMotorPower(double leftPower, double rightPower){//only accepts clipped values
+    public void setMotorPower(double leftPower, double rightPower) {//only accepts clipped values
         clipValues(leftPower, ComponentType.MOTOR);
         clipValues(rightPower, ComponentType.MOTOR);
 
@@ -115,8 +115,8 @@ public class OpHelperClean extends OpMode {
         backRight.setPower(rightPower);
     }
 
-    public void setToEncoderMode(){
-        flag=0;
+    public void setToEncoderMode() {
+        flag = 0;
 
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -125,8 +125,7 @@ public class OpHelperClean extends OpMode {
         backRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    public void setToWOEncoderMode()
-    {
+    public void setToWOEncoderMode() {
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
 
@@ -135,21 +134,20 @@ public class OpHelperClean extends OpMode {
     }
 
     public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
-        leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
+        leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget = leftTarget;
         setTargetValueMotor();
 
         setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
-        if(hasReached())
-        {
-            setMotorPower(0,0);
+        if (hasReached()) {
+            setMotorPower(0, 0);
             return true;//done traveling
         }
         return false;
     }
 
-    public void setTargetValueMotor(){
+    public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
         backLeft.setTargetPosition(leftTarget);
 
@@ -157,20 +155,19 @@ public class OpHelperClean extends OpMode {
         backRight.setTargetPosition(rightTarget);
     }
 
-    public boolean hasReached()
-    {
-        return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
-                Math.abs(backLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
-                Math.abs(frontRight.getCurrentPosition()-rightTarget)<=TOLERANCE &&
-                Math.abs(backRight.getCurrentPosition()-rightTarget)<=TOLERANCE);
+    public boolean hasReached() {
+        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
+                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
+                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE &&
+                Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
 
     //TODO: Run tests to determine the relationship between degrees turned and ticks
-    public boolean setTargetValueTurn(double degrees){
+    public boolean setTargetValueTurn(double degrees) {
         return false;
     }
 
-    public void basicTel(){
+    public void basicTel() {
         telemetry.addData("frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("LeftTarget: ", leftTarget);
@@ -185,36 +182,36 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("Joystick left", gamepad1.left_stick_y);
     }
 
-    enum ComponentType{         //helps with clipValues
+    enum ComponentType {         //helps with clipValues
         NONE,
         MOTOR,
         SERVO
     }
 
     public double clipValues(double initialValue, ComponentType type) {
-        double finalval=0;
+        double finalval = 0;
         if (type == ComponentType.MOTOR)
-            finalval =  Range.clip(initialValue, MOTOR_MIN, MOTOR_MAX);
+            finalval = Range.clip(initialValue, MOTOR_MIN, MOTOR_MAX);
         if (type == ComponentType.SERVO)
-            finalval= Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
+            finalval = Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
         return finalval;
     }
 
 
-    public void setZiplinePosition(boolean down){//slider values
-        if(down){
+    public void setZiplinePosition(boolean down) {//slider values
+        if (down) {
             zipLiner.setPosition(.9);
-        } else{
+        } else {
             zipLiner.setPosition(.2);
         }
     }
 
     //TODO: Calibrate this motor for the arm
-    public void setArmPivot(double power){
+    public void setArmPivot(double power) {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
 
-    public void manualDrive(){
+    public void manualDrive() {
         setToWOEncoderMode();
 
         double rightPower = gamepad1.right_stick_y;
@@ -223,11 +220,11 @@ public class OpHelperClean extends OpMode {
         setMotorPower(rightPower, leftPower);
     }
 
-    public void loop(){
+    public void loop() {
 
     }
 
-    public void stop(){
+    public void stop() {
 
     }
 
