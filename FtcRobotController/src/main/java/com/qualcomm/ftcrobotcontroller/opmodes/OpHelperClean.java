@@ -58,7 +58,9 @@ public class OpHelperClean extends OpMode {
         frontRight = hardwareMap.dcMotor.get("r1");
         backRight = hardwareMap.dcMotor.get("r2");
 
-        armPivot = hardwareMap.dcMotor.get("arm");
+        zipLiner = hardwareMap.servo.get("zip");
+
+        //armPivot = hardwareMap.dcMotor.get("arm");
         setDirection(); //ensures the proper motor directions
 
         resetEncoders(); //ensures that the encoders have reset
@@ -102,7 +104,7 @@ public class OpHelperClean extends OpMode {
     }
 
     //TODO: Implement cheesy drive or special drive code?
-    public void setPower(double leftPower, double rightPower){//only accepts clipped values
+    public void setMotorPower(double leftPower, double rightPower){//only accepts clipped values
         clipValues(leftPower, ComponentType.MOTOR);
         clipValues(rightPower, ComponentType.MOTOR);
 
@@ -137,11 +139,11 @@ public class OpHelperClean extends OpMode {
         rightTarget = leftTarget;
         setTargetValueMotor();
 
-        setPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
         if(hasReached())
         {
-            setPower(0,0);
+            setMotorPower(0,0);
             return true;//done traveling
         }
         return false;
@@ -178,6 +180,9 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("RightTarget: ", rightTarget);
 
         telemetry.addData("RESET ENCODERS", flag);
+
+        telemetry.addData("Joystick right", gamepad1.right_stick_y);
+        telemetry.addData("Joystick left", gamepad1.left_stick_y);
     }
 
     enum ComponentType{         //helps with clipValues
@@ -196,15 +201,12 @@ public class OpHelperClean extends OpMode {
     }
 
 
-    public boolean setServo(double pos){//slider values
-        if(pos == 1){
-            zipLiner.setPosition(Servo.MAX_POSITION);
-        } else if(pos == -1){
-            zipLiner.setPosition(Servo.MIN_POSITION);
-        } else if(pos == 0){
-            zipLiner.setPosition(SERVO_NEUTRAL);
+    public void setServo(boolean down){//slider values
+        if(down){
+            zipLiner.setPosition(.9);
+        } else if(!down){
+            zipLiner.setPosition(.2);
         }
-        return true;
     }
 
     //TODO: Calibrate this motor for the arm
@@ -213,14 +215,18 @@ public class OpHelperClean extends OpMode {
     }
 
     public void manualDrive(){
+        setToWOEncoderMode();
+
         double rightPower = gamepad1.right_stick_y;
         double leftPower = gamepad1.left_stick_y;
 
-        frontLeft.setPower(leftPower);
-        backLeft.setPower(leftPower);
+        setMotorPower(rightPower, leftPower);
 
-        frontRight.setPower(rightPower);
-        backRight.setPower(rightPower);
+//        frontLeft.setPower(leftPower);
+//        backLeft.setPower(leftPower);
+//
+//        frontRight.setPower(rightPower);
+//        backRight.setPower(rightPower);
     }
 
     public void loop(){
