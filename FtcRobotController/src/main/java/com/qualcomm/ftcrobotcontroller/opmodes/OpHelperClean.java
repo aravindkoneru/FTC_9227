@@ -201,10 +201,10 @@ public class OpHelperClean extends OpMode {
     }
 
 
-    public void setServo(boolean down){//slider values
+    public void setZiplinePosition(boolean down){//slider values
         if(down){
             zipLiner.setPosition(.9);
-        } else if(!down){
+        } else{
             zipLiner.setPosition(.2);
         }
     }
