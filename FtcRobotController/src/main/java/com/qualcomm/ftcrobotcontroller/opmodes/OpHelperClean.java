@@ -196,11 +196,18 @@ public class OpHelperClean extends OpMode {
     }
 
 
-    public boolean setServo(double pos){//only accepts a clipped value
-        zipLiner.setPosition(pos);
+    public boolean setServo(double pos){//slider values
+        if(pos == 1){
+            zipLiner.setPosition(Servo.MAX_POSITION);
+        } else if(pos == -1){
+            zipLiner.setPosition(Servo.MIN_POSITION);
+        } else if(pos == 0){
+            zipLiner.setPosition(SERVO_NEUTRAL);
+        }
         return true;
     }
 
+    //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power){
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }

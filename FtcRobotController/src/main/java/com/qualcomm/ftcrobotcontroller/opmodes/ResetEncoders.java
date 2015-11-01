@@ -16,7 +16,6 @@ public class ResetEncoders extends OpMode {
         r1 = hardwareMap.dcMotor.get("r1");
         r2 = hardwareMap.dcMotor.get("r2");
 
-
         l1.setDirection(DcMotor.Direction.REVERSE);
         l2.setDirection(DcMotor.Direction.REVERSE);
 
@@ -24,12 +23,6 @@ public class ResetEncoders extends OpMode {
         r2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         l1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         l2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-
-
-        r1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        r2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        l1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        l2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         telemetry.addData("current encoder value r1", r1.getCurrentPosition());
         telemetry.addData("current encoder value r1", l1.getCurrentPosition());
