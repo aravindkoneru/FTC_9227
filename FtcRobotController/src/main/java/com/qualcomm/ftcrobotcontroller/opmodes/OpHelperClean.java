@@ -221,12 +221,6 @@ public class OpHelperClean extends OpMode {
         double leftPower = gamepad1.left_stick_y;
 
         setMotorPower(rightPower, leftPower);
-
-//        frontLeft.setPower(leftPower);
-//        backLeft.setPower(leftPower);
-//
-//        frontRight.setPower(rightPower);
-//        backRight.setPower(rightPower);
     }
 
     public void loop(){
