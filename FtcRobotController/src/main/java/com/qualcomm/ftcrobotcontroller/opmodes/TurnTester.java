@@ -16,6 +16,4 @@ public class TurnTester extends OpHelperClean {
         setToEncoderMode();
         setTargetValueTurn(45);
     }
-
-
 }

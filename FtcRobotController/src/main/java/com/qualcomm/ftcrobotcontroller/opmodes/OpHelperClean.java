@@ -32,20 +32,27 @@ public class OpHelperClean extends OpMode {
             leftTarget;
 
     //SERVO CONSTANTS
-    private final double SERVO_MAX = 1,
+    private final double
+            SERVO_MAX = 1,
             SERVO_MIN = - 1,
             SERVO_NEUTRAL = 9.0 / 17;      //Stops the continuous servo
 
     //MOTOR RANGES
-    private final double MOTOR_MAX = 1,
+    private final double
+            MOTOR_MAX = 1,
             MOTOR_MIN = - 1;
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
-    private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
+    private final double
+            CIRCUMFERENCE_INCHES = 4 * Math.PI,
             TICKS_PER_ROTATION = 1200 / 1.05,
             TICKS_PER_INCH = TICKS_PER_ROTATION / CIRCUMFERENCE_INCHES,
             TOLERANCE = 10;
 
+    //ROBOT DIMENSIONS
+    private final double   //TODO: Measure these distances for 9927
+            ROBOT_WIDTH = 15.5,           // Width between centerline of wheels
+            ROBOT_WHEEL_DISTANCE = 14;  // Distance between axles
 
     public OpHelperClean() {
 
@@ -164,6 +171,17 @@ public class OpHelperClean extends OpMode {
 
     //TODO: Run tests to determine the relationship between degrees turned and ticks
     public boolean setTargetValueTurn(double degrees) {
+
+        int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
+        leftTarget = encoderTarget;
+        rightTarget = -encoderTarget;
+        setTargetValueMotor();
+        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;//done traveling
+        }
         return false;
     }
 
