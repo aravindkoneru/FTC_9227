@@ -12,19 +12,15 @@ public class MainTeleOp extends OpHelperClean {
     @Override
     public void loop() {
         //basicTel();
-
-        manualDrive();
-
-
         manualDrive();//move robot using joysticks
 
         //Handle zipliner positions
         if(gamepad2.y){
-            setServo(true);
+            setZiplinePosition(true);
         }
 
         if(gamepad2.a){
-            setServo(false);
+            setZiplinePosition(false);
         }
 //
 //        //TODO: Check if this will work
