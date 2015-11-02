@@ -27,7 +27,6 @@ public class MainTeleOp extends OpHelperClean {
             setZiplinePosition(false);
         }
 
-        //TODO: Check if this will work
         //handle arm pivot
         if(gamepad2.left_bumper){
             setArmPivot(-.4);
@@ -37,7 +36,6 @@ public class MainTeleOp extends OpHelperClean {
             setArmPivot(0);
         }
 
-        //TODO: Tape measure code
         if(gamepad2.left_trigger > 0) {
             moveTapeMeasure(.2);
         } else if(gamepad2.right_trigger > 0){
@@ -45,8 +43,6 @@ public class MainTeleOp extends OpHelperClean {
         } else{
             moveTapeMeasure(0);
         }
-//
-//        //TODO: Tape measure code
     }
 
     @Override
