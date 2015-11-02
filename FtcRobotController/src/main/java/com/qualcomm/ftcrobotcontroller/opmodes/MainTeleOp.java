@@ -14,6 +14,10 @@ public class MainTeleOp extends OpHelperClean {
         //basicTel();
         manualDrive();//move robot using joysticks
 
+        if(gamepad1.right_bumper && gamepad1.left_bumper){
+            turtleDrive();
+        }
+
         //Handle zipliner positions
         if(gamepad2.y){
             setZiplinePosition(true);
@@ -22,16 +26,25 @@ public class MainTeleOp extends OpHelperClean {
         if(gamepad2.a){
             setZiplinePosition(false);
         }
-//
-//        //TODO: Check if this will work
-//        //handle arm pivot
-//        if(gamepad2.left_bumper){
-//            setArmPivot(-.4);
-//        }
-//
-//        if(gamepad2.right_bumper){
-//            setArmPivot(.4);
-//        }
+
+        //TODO: Check if this will work
+        //handle arm pivot
+        if(gamepad2.left_bumper){
+            setArmPivot(-.4);
+        }else if(gamepad2.right_bumper){
+            setArmPivot(.4);
+        } else{
+            setArmPivot(0);
+        }
+
+        //TODO: Tape measure code
+        if(gamepad2.left_trigger > 0) {
+            moveTapeMeasure(.2);
+        } else if(gamepad2.right_trigger > 0){
+            moveTapeMeasure(-.2);
+        } else{
+            moveTapeMeasure(0);
+        }
 //
 //        //TODO: Tape measure code
     }

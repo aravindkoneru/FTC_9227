@@ -58,12 +58,24 @@ public class OpHelperClean extends OpMode {
         frontRight = hardwareMap.dcMotor.get("r1");
         backRight = hardwareMap.dcMotor.get("r2");
 
+        //pivot motor
+        armPivot = hardwareMap.dcMotor.get("arm");
+
+        //tape measure arms
+        armMotor1 = hardwareMap.dcMotor.get("tm1");
+        armMotor2 = hardwareMap.dcMotor.get("tm2");
+
         zipLiner = hardwareMap.servo.get("zip");
 
-        //armPivot = hardwareMap.dcMotor.get("arm");
+
         setDirection(); //ensures the proper motor directions
 
         resetEncoders(); //ensures that the encoders have reset
+    }
+
+    public void moveTapeMeasure(double power){
+        armMotor2.setPower(power);
+        armMotor1.setPower(power);
     }
 
     //sets the proper direction for the motors
@@ -81,6 +93,10 @@ public class OpHelperClean extends OpMode {
 
         if(backRight.getDirection() == DcMotor.Direction.FORWARD){
             backRight.setDirection(DcMotor.Direction.REVERSE);
+        }
+
+        if(armMotor1.getDirection() == DcMotor.Direction.FORWARD){
+            armMotor1.setDirection(DcMotor.Direction.REVERSE);
         }
 
         //TODO configure arm motor direction
@@ -221,6 +237,15 @@ public class OpHelperClean extends OpMode {
         double leftPower = gamepad1.left_stick_y;
 
         setMotorPower(rightPower, leftPower);
+    }
+
+    public void turtleDrive(){
+        setToWOEncoderMode();
+
+        double rightPower = gamepad1.right_stick_y;
+        double leftPower = gamepad1.left_stick_y;
+
+        setMotorPower(rightPower*.7, leftPower*.7);
     }
 
     public void loop(){
