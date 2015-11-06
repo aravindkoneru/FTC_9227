@@ -159,13 +159,16 @@ public class OpHelperClean extends OpMode {
         backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-    //encoder drive to go straight
-    public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
+    public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget = leftTarget;
         setTargetValueMotor();
 
-        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+        if(speed){
+            setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
+        } else{
+            setMotorPower(.4,.4);
+        }
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -173,7 +176,6 @@ public class OpHelperClean extends OpMode {
         }
         return false;
     }
-
     //sets the encoder target position of drive motors
     public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
@@ -199,6 +201,7 @@ public class OpHelperClean extends OpMode {
         rightTarget = -encoderTarget;
         setTargetValueMotor();
         setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -243,6 +246,9 @@ public class OpHelperClean extends OpMode {
         } else {
             zipLiner.setPosition(.2);
         }
+    }
+    public void setZiplinePosition(double pos) {//Sets manually
+        zipLiner.setPosition(clipValues(pos, ComponentType.SERVO));
     }
 
     public void setArmPivot(double power) {
