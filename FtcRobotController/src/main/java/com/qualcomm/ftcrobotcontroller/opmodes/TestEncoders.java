@@ -51,16 +51,16 @@ public class TestEncoders extends OpHelperClean{
             }
             case SECOND_STATE:
             {
-//                if(runStraight(12))// && debug)
-//                {
-                //    resetEncoders();
+                if(runStraight(12)) {
+                    resetEncoders();
                     rs = RunState.LAST_STATE;
-//                }
+                }
                 break;
-            }
 
+            }
             case LAST_STATE:
             {
+                stop();
             }
 
 

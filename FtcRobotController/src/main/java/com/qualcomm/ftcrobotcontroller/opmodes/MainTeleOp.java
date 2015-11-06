@@ -6,8 +6,9 @@ public class MainTeleOp extends OpHelperClean {
 
     }
 
-    //TODO: Talk to drive team about controller prefs/who controls what
-    //Right now, all operator stuff is gamepad2 and driving is gamepad1
+    //operator = gamepad2; driver = gamepad1
+
+    //TODO: Check all of these to make sure they work
 
     @Override
     public void loop() {
@@ -20,27 +21,25 @@ public class MainTeleOp extends OpHelperClean {
         }
 
         //Handle zipliner positions
-        if(gamepad2.y){
+        if(gamepad2.left_bumper){
             setZiplinePosition(true);
-        }
-
-        if(gamepad2.a){
+        } else if(gamepad2.right_bumper){
             setZiplinePosition(false);
         }
 
         //handle arm pivot
-        if(gamepad2.left_bumper){
+        if(gamepad2.dpad_up){
             setArmPivot(-.2);
-        }else if(gamepad2.right_bumper){
+        }else if(gamepad2.dpad_down){
             setArmPivot(.2);
         } else{
             setArmPivot(0);
         }
 
         //handle the tape measure
-        if(gamepad2.left_trigger > 0) {
+        if(gamepad2.y) {
             moveTapeMeasure(.2);
-        } else if(gamepad2.right_trigger > 0){
+        } else if(gamepad2.a){
             moveTapeMeasure(-.2);
         } else{
             moveTapeMeasure(0);

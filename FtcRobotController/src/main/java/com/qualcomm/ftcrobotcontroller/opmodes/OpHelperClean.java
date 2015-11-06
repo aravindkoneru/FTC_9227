@@ -52,7 +52,7 @@ public class OpHelperClean extends OpMode {
             TOLERANCE = 10;
 
     //ROBOT DIMENSIONS
-    private final double   //TODO: Measure these distances for 9927
+    private final double
             ROBOT_WIDTH = 15.5,           // Width between centerline of wheels
             ROBOT_WHEEL_DISTANCE = 14;  // Distance between axles
 
@@ -111,7 +111,6 @@ public class OpHelperClean extends OpMode {
             armMotor1.setDirection(DcMotor.Direction.REVERSE);
         }
 
-        //TODO configure arm motor direction
     }
 
     //reset drive encoders and return true when everything is at 0
@@ -246,7 +245,6 @@ public class OpHelperClean extends OpMode {
         }
     }
 
-    //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power) {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
@@ -263,21 +261,18 @@ public class OpHelperClean extends OpMode {
         } else{
             setMotorPower(rightPower, leftPower);
         }
-
     }
 
-
+    //will be over written by the class
     public void loop() {
     }
 
-
+    //put everything on brake
     public void stop(){
-
         setMotorPower(0,0);//brake the drive motors
         moveTapeMeasure(0);//brake the measuring tape motors
         setZiplinePosition(false);//bring the zipliner back up
         setArmPivot(0);//brake the pivot arm
-
     }
 
 }
