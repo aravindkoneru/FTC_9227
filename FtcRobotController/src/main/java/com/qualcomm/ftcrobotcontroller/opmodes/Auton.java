@@ -4,7 +4,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * Created by Tim on 10/25/2015.
  * copied by ruchir
  */
-public class Auton extends OpHelperClean{
+public class Auton extends OpModeHelperClean{
 
 
     enum RunState{
@@ -43,7 +43,7 @@ public class Auton extends OpHelperClean{
             case FIRST_STATE:
             {
 
-                if(runStraight(40) )//&& debug)
+                if(runStraight(-40, false) )//&& debug)
                 {
                     rs = RunState.FIRST_RESET;
                 }
@@ -58,7 +58,7 @@ public class Auton extends OpHelperClean{
             }
             case SECOND_STATE:
             {
-                if(setTargetValueTurn(127))
+                if(setTargetValueTurn(115))
                 {
                     rs = RunState.SECOND_RESET;
                 }
@@ -74,7 +74,7 @@ public class Auton extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if(runStraight(27)){
+                if(runStraight(-35, false)){
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -87,7 +87,7 @@ public class Auton extends OpHelperClean{
             }
             case FOURTH_STATE:
             {
-                if(setTargetValueTurn(90)){
+                if(setTargetValueTurn(75)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -101,13 +101,13 @@ public class Auton extends OpHelperClean{
             }
             case FIFTH_STATE:
             {
-                setZiplinePosition(true);
+                setZiplinePosition(false);
                 rs = RunState.LAST_STATE;
                 break;
             }
             case LAST_STATE:
             {
-                if(runStraight(30))
+                if(runStraight(-75, true))
                 {
                     rs = RunState.STOP_STATE;
                 }
