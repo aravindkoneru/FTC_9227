@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-public class OpModeHelperClean extends OpMode {
+public class OpHelperClean extends OpMode {
 
 
     //left drive motors
@@ -52,11 +52,11 @@ public class OpModeHelperClean extends OpMode {
             TOLERANCE = 10;
 
     //ROBOT DIMENSIONS
-    private final double   //TODO: Measure these distances for 9927
+    private final double
             ROBOT_WIDTH = 15.5,           // Width between centerline of wheels
             ROBOT_WHEEL_DISTANCE = 14;  // Distance between axles
 
-    public OpModeHelperClean() {
+    public OpHelperClean() {
 
     }
 
@@ -111,7 +111,6 @@ public class OpModeHelperClean extends OpMode {
             armMotor1.setDirection(DcMotor.Direction.REVERSE);
         }
 
-        //TODO configure arm motor direction
     }
 
     //reset drive encoders and return true when everything is at 0
@@ -160,7 +159,6 @@ public class OpModeHelperClean extends OpMode {
         backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-    //encoder drive to go straight
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget = leftTarget;
@@ -172,14 +170,12 @@ public class OpModeHelperClean extends OpMode {
             setMotorPower(.4,.4);
         }
 
-
         if (hasReached()) {
             setMotorPower(0, 0);
             return true;//done traveling
         }
         return false;
     }
-
     //sets the encoder target position of drive motors
     public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
@@ -205,6 +201,7 @@ public class OpModeHelperClean extends OpMode {
         rightTarget = -encoderTarget;
         setTargetValueMotor();
         setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -250,8 +247,10 @@ public class OpModeHelperClean extends OpMode {
             zipLiner.setPosition(.2);
         }
     }
+    public void setZiplinePosition(double pos) {//Sets manually
+        zipLiner.setPosition(clipValues(pos, ComponentType.SERVO));
+    }
 
-    //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power) {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
@@ -268,21 +267,18 @@ public class OpModeHelperClean extends OpMode {
         } else{
             setMotorPower(rightPower, leftPower);
         }
-
     }
 
-
+    //will be over written by the class
     public void loop() {
     }
 
-
+    //put everything on brake
     public void stop(){
-
         setMotorPower(0,0);//brake the drive motors
         moveTapeMeasure(0);//brake the measuring tape motors
-        setZiplinePosition(true);//bring the zipliner back up
+        setZiplinePosition(false);//bring the zipliner back up
         setArmPivot(0);//brake the pivot arm
-
     }
 
 }
