@@ -4,7 +4,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * Created by Tim on 10/25/2015.
  * copied by ruchir
  */
-public class Auton extends OpModeHelperClean{
+public class RedAuton extends OpModeHelperClean{
 
 
     enum RunState{
@@ -18,15 +18,13 @@ public class Auton extends OpModeHelperClean{
         FOURTH_STATE,
         LAST_STATE,
         FOURTH_RESET,
+        FIFTH_RESET,
         FIFTH_STATE,
-        SIXTH_RESET,
-        SIXTH_STATE,
         STOP_STATE
     }
-    double x = 0;
 
     private RunState rs = RunState.RESET_STATE;
-    public Auton() {}
+    public RedAuton() {}
 
 
     @Override
@@ -60,7 +58,7 @@ public class Auton extends OpModeHelperClean{
             }
             case SECOND_STATE:
             {
-                if(setTargetValueTurn(115))
+                if(setTargetValueTurn(-115))
                 {
                     rs = RunState.SECOND_RESET;
                 }
@@ -89,7 +87,7 @@ public class Auton extends OpModeHelperClean{
             }
             case FOURTH_STATE:
             {
-                if(setTargetValueTurn(75)){
+                if(setTargetValueTurn(-75)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -103,19 +101,8 @@ public class Auton extends OpModeHelperClean{
             }
             case FIFTH_STATE:
             {
-                setZipLiner(0.95);
-                rs = RunState.SIXTH_STATE;
-                break;
-            }
-            case SIXTH_STATE:
-            {
-                setArmPivot(-.2);
-
-                if(x > 100){
-                    setArmPivot(0);
-                    rs = RunState.LAST_STATE;
-                }
-                x++;
+                setZipLiner(.95);
+                rs = RunState.LAST_STATE;
                 break;
             }
             case LAST_STATE:
@@ -123,7 +110,6 @@ public class Auton extends OpModeHelperClean{
                 if(runStraight(-75, true))
                 {
                     rs = RunState.STOP_STATE;
-                    setArmPivot(0);
                 }
                 break;
             }

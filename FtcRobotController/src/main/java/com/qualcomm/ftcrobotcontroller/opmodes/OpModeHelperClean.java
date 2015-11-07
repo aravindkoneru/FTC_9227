@@ -256,6 +256,11 @@ public class OpModeHelperClean extends OpMode {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
 
+    public void setZipLiner(double pos)
+    {
+        zipLiner.setPosition(clipValues(pos,ComponentType.SERVO ));
+    }
+
     //if true, then do turtle mode, otherwise, drive normally
     public void manualDrive(boolean turtleMode) {
         setToWOEncoderMode();

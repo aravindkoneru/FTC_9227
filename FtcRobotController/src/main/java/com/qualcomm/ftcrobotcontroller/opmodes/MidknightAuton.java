@@ -4,7 +4,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * Created by Tim on 10/25/2015.
  * copied by ruchir
  */
-public class Auton extends OpModeHelperClean{
+public class MidknightAuton extends OpModeHelperClean{
 
 
     enum RunState{
@@ -18,15 +18,13 @@ public class Auton extends OpModeHelperClean{
         FOURTH_STATE,
         LAST_STATE,
         FOURTH_RESET,
+        FIFTH_RESET,
         FIFTH_STATE,
-        SIXTH_RESET,
-        SIXTH_STATE,
         STOP_STATE
     }
-    double x = 0;
 
     private RunState rs = RunState.RESET_STATE;
-    public Auton() {}
+    public MidknightAuton() {}
 
 
     @Override
@@ -44,8 +42,7 @@ public class Auton extends OpModeHelperClean{
             }
             case FIRST_STATE:
             {
-
-                if(runStraight(-40, false) )//&& debug)
+                if(runStraight(-38, false) )//&& debug)
                 {
                     rs = RunState.FIRST_RESET;
                 }
@@ -60,14 +57,14 @@ public class Auton extends OpModeHelperClean{
             }
             case SECOND_STATE:
             {
-                if(setTargetValueTurn(115))
+                if(setTargetValueTurn(110))
                 {
-                    rs = RunState.SECOND_RESET;
+                    rs = RunState.STOP_STATE;
                 }
                 break;
-            }
+           }
 
-            case SECOND_RESET:
+            /*case SECOND_RESET:
             {
                 if(resetEncoders()){
                     rs = RunState.THIRD_STATE;
@@ -76,7 +73,7 @@ public class Auton extends OpModeHelperClean{
             }
             case THIRD_STATE:
             {
-                if(runStraight(-35, false)){
+                if(runStraight(123, false)){
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -103,19 +100,8 @@ public class Auton extends OpModeHelperClean{
             }
             case FIFTH_STATE:
             {
-                setZipLiner(0.95);
-                rs = RunState.SIXTH_STATE;
-                break;
-            }
-            case SIXTH_STATE:
-            {
-                setArmPivot(-.2);
-
-                if(x > 100){
-                    setArmPivot(0);
-                    rs = RunState.LAST_STATE;
-                }
-                x++;
+                setZipLinerPosition(.95);
+                rs = RunState.LAST_STATE;
                 break;
             }
             case LAST_STATE:
@@ -123,10 +109,9 @@ public class Auton extends OpModeHelperClean{
                 if(runStraight(-75, true))
                 {
                     rs = RunState.STOP_STATE;
-                    setArmPivot(0);
                 }
                 break;
-            }
+            }*/
             case STOP_STATE:
             {
                 stop();
