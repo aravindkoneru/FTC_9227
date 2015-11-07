@@ -42,14 +42,12 @@ public class FtcOpModeRegister implements OpModeRegister {
   public void register(OpModeManager manager) {
 
       //null op
-      manager.register("NullOp", NullOp.class);
 
       //main
       manager.register("MainTeleOp", MainTeleOp.class);
 
       //autons/encoder stuff
       manager.register("ResetEncoder", ResetEncoders.class);
-      manager.register("TurnTest", TurnTester.class);
       manager.register("auton", Auton.class);
   }
 }
