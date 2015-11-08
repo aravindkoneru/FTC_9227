@@ -23,8 +23,10 @@ public class MainTeleOp extends OpHelperClean {
         //Handle zipliner positions
         if(gamepad2.left_bumper){
             setZiplinePosition(true);
-        } else if(gamepad2.right_bumper){
+        } else if(gamepad2.right_bumper){//brings it down
             setZiplinePosition(false);
+        } else if(gamepad2.b){
+            setZiplinePosition(.1);
         }
 
         //handle arm pivot

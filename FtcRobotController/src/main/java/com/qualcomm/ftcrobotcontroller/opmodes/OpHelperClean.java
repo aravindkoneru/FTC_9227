@@ -202,7 +202,6 @@ public class OpHelperClean extends OpMode {
         setTargetValueMotor();
         setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
-
         if (hasReached()) {
             setMotorPower(0, 0);
             return true;//done traveling
