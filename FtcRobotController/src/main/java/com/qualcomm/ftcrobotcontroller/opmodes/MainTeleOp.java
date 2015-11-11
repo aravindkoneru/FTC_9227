@@ -8,8 +8,6 @@ public class MainTeleOp extends OpHelperClean {
 
     //operator = gamepad2; driver = gamepad1
 
-    //TODO: Check all of these to make sure they work
-
     @Override
     public void loop() {
         basicTel();
@@ -47,5 +45,4 @@ public class MainTeleOp extends OpHelperClean {
             moveTapeMeasure(0);
         }
     }
-
 }

@@ -279,5 +279,4 @@ public class OpHelperClean extends OpMode {
         setZiplinePosition(false);//bring the zipliner back up
         setArmPivot(0);//brake the pivot arm
     }
-
 }
