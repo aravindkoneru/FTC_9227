@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
+//TODO can u guys check the code.
 public class OpModeHelperClean extends OpMode {
 
 
@@ -87,6 +88,27 @@ public class OpModeHelperClean extends OpMode {
         armMotor2.setPower(power);
         armMotor1.setPower(power);
     }
+
+    //This is the code if we are using encoders with our tape measuere system
+    public void moveTapeMeasureWithEncoders(double Distance)
+    {
+        leftTarget = (int) (Distance* TICKS_PER_INCH);
+        rightTarget = leftTarget;
+        setTargetValueMotor();
+        moveTapeMeasure(.1);
+    }
+    //idk if we are using encoders
+
+
+    //This is the code if we are using encoders on our
+    public void armPivotWithEncoders(double pos)
+    {
+        leftTarget = (int) (pos* TICKS_PER_INCH);
+        rightTarget = leftTarget;
+        setTargetValueMotor();
+        setArmPivot(.1);
+    }
+
 
     //sets the proper direction for the motors
     public void setDirection() {
@@ -198,11 +220,13 @@ public class OpModeHelperClean extends OpMode {
     }
 
     //TODO: Run tests to determine the relationship between degrees turned and ticks
+
     public boolean setTargetValueTurn(double degrees) {
 
         int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
         leftTarget = encoderTarget;
         rightTarget = -encoderTarget;
+
         setTargetValueMotor();
         setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 

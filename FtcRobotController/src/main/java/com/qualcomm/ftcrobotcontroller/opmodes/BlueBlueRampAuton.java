@@ -4,7 +4,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * Created by Tim on 10/25/2015.
  * copied by ruchir
  */
-public class Auton extends OpModeHelperClean{
+public class BlueBlueRampAuton extends OpModeHelperClean{
 
 
     enum RunState{
@@ -26,7 +26,7 @@ public class Auton extends OpModeHelperClean{
     double x = 0;
 
     private RunState rs = RunState.RESET_STATE;
-    public Auton() {}
+    public BlueBlueRampAuton() {}
 
 
     @Override
