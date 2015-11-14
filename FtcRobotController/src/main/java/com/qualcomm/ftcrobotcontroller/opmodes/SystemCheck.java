@@ -1,9 +1,11 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
 /**
  * Created by aravindkoneru on 11/8/15.
  */
-public class SystemCheck extends OpHelperClean{
+public class SystemCheck extends OpModeHelperClean{
 
     public SystemCheck(){
 
