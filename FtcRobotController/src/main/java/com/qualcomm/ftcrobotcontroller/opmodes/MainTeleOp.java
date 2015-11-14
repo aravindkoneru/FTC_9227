@@ -1,6 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-public class MainTeleOp extends OpHelperClean {
+public class MainTeleOp extends OpModeHelperClean {
 
     public MainTeleOp(){
 
@@ -8,6 +8,7 @@ public class MainTeleOp extends OpHelperClean {
 
     //TODO: Talk to drive team about controller prefs/who controls what
     //Right now, all operator stuff is gamepad2 and driving is gamepad1
+    //TODO: check wiring
 
     @Override
     public void loop() {

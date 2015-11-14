@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-//TODO can u guys check the code.
+//TODO: Left and right Encoders are switched
 public class OpModeHelperClean extends OpMode {
 
 
@@ -113,15 +113,15 @@ public class OpModeHelperClean extends OpMode {
     //sets the proper direction for the motors
     public void setDirection() {
         //drive motors
-        if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) {
+        if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) { //Front Left = Front Right
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
         }
-        if (backLeft.getDirection() == DcMotor.Direction.REVERSE) {
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
+        if (backLeft.getDirection() == DcMotor.Direction.FORWARD) {
+            backLeft.setDirection(DcMotor.Direction.REVERSE);
         }
 
-        if (frontRight.getDirection() == DcMotor.Direction.FORWARD) {
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
+        if (frontRight.getDirection() == DcMotor.Direction.REVERSE) {
+            frontRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
         if (backRight.getDirection() == DcMotor.Direction.FORWARD) {
@@ -150,7 +150,7 @@ public class OpModeHelperClean extends OpMode {
                 backRight.getCurrentPosition() == 0);
 
     }
-
+    //TODO: CHECK WIRING
     //TODO: Implement cheesy drive or special drive code?
     public void setMotorPower(double leftPower, double rightPower) {//only accepts clipped values
         clipValues(leftPower, ComponentType.MOTOR);
@@ -160,7 +160,7 @@ public class OpModeHelperClean extends OpMode {
         backLeft.setPower(leftPower);
 
         frontRight.setPower(rightPower);
-        backRight.setPower(rightPower);
+        backRight.setPower(-rightPower);
     }
 
     //sets drive motors to encoder mode

@@ -122,7 +122,7 @@ public class PkZone extends OpModeHelperClean{
                 if(TimeDurationForTapeMeasure > 100){
                     moveTapeMeasure(0);
                     TimeDurationForTapeMeasure =0;
-                    rs = RunState.EIGHT_STATE;
+                    rs = RunState.SEVENTH_STATE;
                 }
                 TimeDurationForTapeMeasure++;
                 break;
@@ -134,7 +134,7 @@ public class PkZone extends OpModeHelperClean{
 
                 if(TimeDurationForArm > 150){
                     setArmPivot(0);
-                    rs = RunState.SIXTH_STATE;
+                    rs = RunState.EIGHT_STATE;
                 }
                 TimeDurationForArm++;
                 break;
