@@ -51,7 +51,7 @@ public class PkZone extends OpModeHelperClean{
             }
             case FIRST_STATE: {
             //go forward 23 inches
-                if (runStraight(23, false)) {
+                if (runStraight(-23, false)) {
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -79,7 +79,7 @@ public class PkZone extends OpModeHelperClean{
             case THIRD_STATE:
             {
             //go foward to the basket
-                if (runStraight(84, false)) {
+                if (runStraight(-84, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -91,7 +91,7 @@ public class PkZone extends OpModeHelperClean{
             }
             case FOURTH_STATE:
             {//align with basket
-              if(setTargetValueTurn(-45)){
+              if(setTargetValueTurn(45)){
                   rs = RunState.FOURTH_RESET;
               }
               break;
@@ -117,7 +117,7 @@ public class PkZone extends OpModeHelperClean{
             case SIXTH_STATE:
             {
             //extend tape masures
-                moveTapeMeasure(.1);
+                /*moveTapeMeasure(.1);
 
                 if(TimeDurationForTapeMeasure > 100){
                     moveTapeMeasure(0);
@@ -125,8 +125,10 @@ public class PkZone extends OpModeHelperClean{
                     rs = RunState.SEVENTH_STATE;
                 }
                 TimeDurationForTapeMeasure++;
-                break;
+                break;*/
+                moveTapeMeasureWithEncoders(6);
             }
+
             case SEVENTH_STATE:
             {
             //setting down arm
@@ -139,6 +141,7 @@ public class PkZone extends OpModeHelperClean{
                 TimeDurationForArm++;
                 break;
             }
+
             case EIGHT_STATE:
             {
                 moveTapeMeasure(-.1);
@@ -175,7 +178,7 @@ public class PkZone extends OpModeHelperClean{
             }
             */
             /*
-            
+
              */
         }
     }

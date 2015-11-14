@@ -27,7 +27,8 @@ public class OpModeHelperClean extends OpMode {
             armPivot;
 
     //zipliner servo
-    Servo zipLiner;
+    Servo zipLinerR;
+    Servo ziplinerL;
 
 
     //target encoder position
@@ -76,7 +77,8 @@ public class OpModeHelperClean extends OpMode {
         armMotor1 = hardwareMap.dcMotor.get("tm1");
         armMotor2 = hardwareMap.dcMotor.get("tm2");
 
-        zipLiner = hardwareMap.servo.get("zip");
+        zipLinerR = hardwareMap.servo.get("zipR");
+        ziplinerL = hardwareMap.servo.get("zipL");
 
 
         setDirection(); //ensures the proper motor directions
@@ -96,6 +98,7 @@ public class OpModeHelperClean extends OpMode {
         rightTarget = leftTarget;
         setTargetValueMotor();
         moveTapeMeasure(.1);
+
     }
     //idk if we are using encoders
 
@@ -138,11 +141,11 @@ public class OpModeHelperClean extends OpMode {
 
     //reset drive encoders and return true when everything is at 0
     public boolean resetEncoders() {
-        frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        frontRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        backRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         return (frontLeft.getCurrentPosition() == 0 &&
                 backLeft.getCurrentPosition() == 0 &&
@@ -166,20 +169,20 @@ public class OpModeHelperClean extends OpMode {
     //sets drive motors to encoder mode
     public void setToEncoderMode() {
 
-        frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
-        frontRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
     //sets drive motors to run without encoders and use power
     public void setToWOEncoderMode() {
-        frontLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
 
-        frontRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     //encoder drive to go straight
@@ -267,23 +270,40 @@ public class OpModeHelperClean extends OpMode {
 
 
     //true = down; false = up
-    public void setZiplinePosition(boolean down) {//slider values
+    public void setZiplinePositionL (boolean down) {//slider values
         if (down) {
-            zipLiner.setPosition(.9);
+            ziplinerL.setPosition(.9);
         } else {
-            zipLiner.setPosition(.2);
+            ziplinerL.setPosition(.2);
         }
     }
+
+    public void setZiplinePositionR (boolean down) {
+        if (down) {
+            zipLinerR.setPosition(.9);
+        } else {
+            zipLinerR.setPosition(.2);
+        }
+
+    }
+
+
 
     //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power) {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
 
-    public void setZipLiner(double pos)
+    public void setZipLinerL (double pos)
     {
-        zipLiner.setPosition(clipValues(pos,ComponentType.SERVO ));
+        ziplinerL.setPosition(clipValues(pos, ComponentType.SERVO));
     }
+
+    public void setZipLinerR (double pos)
+    {
+        zipLinerR.setPosition(clipValues(pos,ComponentType.SERVO ));
+    }
+
 
     //if true, then do turtle mode, otherwise, drive normally
     public void manualDrive(boolean turtleMode) {
@@ -309,7 +329,8 @@ public class OpModeHelperClean extends OpMode {
 
         setMotorPower(0,0);//brake the drive motors
         moveTapeMeasure(0);//brake the measuring tape motors
-        setZiplinePosition(true);//bring the zipliner back up
+        setZiplinePositionR(true);//bring the zipliner back up
+        setZiplinePositionL(true);//bring the zipliner back up
         setArmPivot(0);//brake the pivot arm
 
     }

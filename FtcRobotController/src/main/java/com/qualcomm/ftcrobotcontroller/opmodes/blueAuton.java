@@ -4,7 +4,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * Created by Tim on 10/25/2015.
  * copied by ruchir
  */
-public class blueAuton extends OpHelperClean{
+public class blueAuton extends OpModeHelperClean{
 
 
     enum RunState{
@@ -104,7 +104,7 @@ public class blueAuton extends OpHelperClean{
             }
             case FIFTH_STATE:
             {
-                setZiplinePosition(false);
+                setZiplinePositionL(false);
                 rs = RunState.SIXTH_STATE;
                 break;
             }

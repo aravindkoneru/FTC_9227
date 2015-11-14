@@ -3,7 +3,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by aravindkoneru on 11/8/15.
  */
-public class SystemCheck extends OpHelperClean{
+public class SystemCheck extends OpModeHelperClean{
 
     public SystemCheck(){
 

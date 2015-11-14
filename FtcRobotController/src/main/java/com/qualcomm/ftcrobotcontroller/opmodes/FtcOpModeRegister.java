@@ -17,8 +17,9 @@ public class FtcOpModeRegister implements OpModeRegister {
 
       //autons/encoder stuff
       manager.register("MainTeleop", MainTeleOp.class);
-      manager.register("BlueAuton", BlueBlueRampAuton.class);
-      manager.register("RedAuton", RedBlueRampAuton.class);
+//      manager.register("BlueAuton", BlueBlueRampAuton.class);
+//      manager.register("RedAuton", RedBlueRampAuton.class);
+      manager.register("BLueCLimber", PkZone.class);
 
   }
 }
