@@ -27,7 +27,8 @@ public class OpModeHelperClean extends OpMode {
             armPivot;
 
     //zipliner servo
-    Servo zipLiner;
+    Servo zipLinerR;
+    Servo ziplinerL;
 
 
     //target encoder position
@@ -76,7 +77,8 @@ public class OpModeHelperClean extends OpMode {
         armMotor1 = hardwareMap.dcMotor.get("tm1");
         armMotor2 = hardwareMap.dcMotor.get("tm2");
 
-        zipLiner = hardwareMap.servo.get("zip");
+        zipLinerR = hardwareMap.servo.get("zipR");
+        ziplinerL = hardwareMap.servo.get("zipL");
 
 
         setDirection(); //ensures the proper motor directions
@@ -96,6 +98,7 @@ public class OpModeHelperClean extends OpMode {
         rightTarget = leftTarget;
         setTargetValueMotor();
         moveTapeMeasure(.1);
+
     }
     //idk if we are using encoders
 
@@ -267,23 +270,40 @@ public class OpModeHelperClean extends OpMode {
 
 
     //true = down; false = up
-    public void setZiplinePosition(boolean down) {//slider values
+    public void setZiplinePositionL (boolean down) {//slider values
         if (down) {
-            zipLiner.setPosition(.9);
+            ziplinerL.setPosition(.9);
         } else {
-            zipLiner.setPosition(.2);
+            ziplinerL.setPosition(.2);
         }
     }
+
+    public void setZiplinePositionR (boolean down) {
+        if (down) {
+            zipLinerR.setPosition(.9);
+        } else {
+            zipLinerR.setPosition(.2);
+        }
+
+    }
+
+
 
     //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power) {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
 
-    public void setZipLiner(double pos)
+    public void setZipLinerL (double pos)
     {
-        zipLiner.setPosition(clipValues(pos,ComponentType.SERVO ));
+        ziplinerL.setPosition(clipValues(pos, ComponentType.SERVO));
     }
+
+    public void setZipLinerR (double pos)
+    {
+        zipLinerR.setPosition(clipValues(pos,ComponentType.SERVO ));
+    }
+
 
     //if true, then do turtle mode, otherwise, drive normally
     public void manualDrive(boolean turtleMode) {
@@ -309,7 +329,8 @@ public class OpModeHelperClean extends OpMode {
 
         setMotorPower(0,0);//brake the drive motors
         moveTapeMeasure(0);//brake the measuring tape motors
-        setZiplinePosition(true);//bring the zipliner back up
+        setZiplinePositionR(true);//bring the zipliner back up
+        setZiplinePositionL(true);//bring the zipliner back up
         setArmPivot(0);//brake the pivot arm
 
     }

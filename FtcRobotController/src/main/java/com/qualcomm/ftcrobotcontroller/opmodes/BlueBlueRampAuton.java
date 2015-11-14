@@ -103,7 +103,7 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case FIFTH_STATE:
             {
-                setZipLiner(0.95);
+                setZipLinerL(0.95);
                 rs = RunState.SIXTH_STATE;
                 break;
             }
