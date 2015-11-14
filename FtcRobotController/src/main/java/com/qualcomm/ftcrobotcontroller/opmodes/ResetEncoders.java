@@ -36,8 +36,6 @@ public class ResetEncoders extends OpMode {
         r2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         l1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         l2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        //left is -
-        //right goes -
     }
 
     @Override

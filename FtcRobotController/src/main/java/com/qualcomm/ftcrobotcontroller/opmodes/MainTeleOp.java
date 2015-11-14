@@ -10,6 +10,7 @@ public class MainTeleOp extends OpModeHelperClean {
     //Right now, all operator stuff is gamepad2 and driving is gamepad1
     //TODO: check wiring
 
+
     @Override
     public void loop() {
         basicTel();
@@ -21,31 +22,28 @@ public class MainTeleOp extends OpModeHelperClean {
         }
 
         //Handle zipliner positions
-        if(gamepad2.y){
+        if(gamepad2.left_bumper){
             setZiplinePosition(true);
-        }
-
-        if(gamepad2.a){
+        } else if(gamepad2.right_bumper){//brings it down
             setZiplinePosition(false);
         }
 
         //handle arm pivot
-        if(gamepad2.left_bumper){
+        if(gamepad2.dpad_up){
             setArmPivot(-.2);
-        }else if(gamepad2.right_bumper){
+        }else if(gamepad2.dpad_down){
             setArmPivot(.2);
         } else{
             setArmPivot(0);
         }
 
         //handle the tape measure
-        if(gamepad2.left_trigger > 0) {
+        if(gamepad2.y) {
             moveTapeMeasure(.2);
-        } else if(gamepad2.right_trigger > 0){
+        } else if(gamepad2.a){
             moveTapeMeasure(-.2);
         } else{
             moveTapeMeasure(0);
         }
     }
-
 }

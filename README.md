@@ -1,3 +1,3 @@
 #FTC 9927
 
-The official code repo for FTC 9927. 
+Official code repository of The MidKnight Magic Too
