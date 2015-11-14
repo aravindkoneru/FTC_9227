@@ -1,12 +1,15 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-public class MainTeleOp extends OpHelperClean {
+public class MainTeleOp extends OpModeHelperClean {
 
     public MainTeleOp(){
 
     }
 
-    //operator = gamepad2; driver = gamepad1
+    //TODO: Talk to drive team about controller prefs/who controls what
+    //Right now, all operator stuff is gamepad2 and driving is gamepad1
+    //TODO: check wiring
+
 
     @Override
     public void loop() {
@@ -23,8 +26,6 @@ public class MainTeleOp extends OpHelperClean {
             setZiplinePosition(true);
         } else if(gamepad2.right_bumper){//brings it down
             setZiplinePosition(false);
-        } else if(gamepad2.b){
-            setZiplinePosition(.1);
         }
 
         //handle arm pivot

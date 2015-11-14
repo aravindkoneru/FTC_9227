@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-public class OpHelperClean extends OpMode {
+//TODO: Left and right Encoders are switched
+public class OpModeHelperClean extends OpMode {
 
 
     //left drive motors
@@ -52,11 +53,11 @@ public class OpHelperClean extends OpMode {
             TOLERANCE = 10;
 
     //ROBOT DIMENSIONS
-    private final double
+    private final double   //TODO: Measure these distances for 9927
             ROBOT_WIDTH = 15.5,           // Width between centerline of wheels
             ROBOT_WHEEL_DISTANCE = 14;  // Distance between axles
 
-    public OpHelperClean() {
+    public OpModeHelperClean() {
 
     }
 
@@ -88,18 +89,39 @@ public class OpHelperClean extends OpMode {
         armMotor1.setPower(power);
     }
 
+    //This is the code if we are using encoders with our tape measuere system
+    public void moveTapeMeasureWithEncoders(double Distance)
+    {
+        leftTarget = (int) (Distance* TICKS_PER_INCH);
+        rightTarget = leftTarget;
+        setTargetValueMotor();
+        moveTapeMeasure(.1);
+    }
+    //idk if we are using encoders
+
+
+    //This is the code if we are using encoders on our
+    public void armPivotWithEncoders(double pos)
+    {
+        leftTarget = (int) (pos* TICKS_PER_INCH);
+        rightTarget = leftTarget;
+        setTargetValueMotor();
+        setArmPivot(.1);
+    }
+
+
     //sets the proper direction for the motors
     public void setDirection() {
         //drive motors
-        if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) {
+        if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) { //Front Left = Front Right
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
         }
-        if (backLeft.getDirection() == DcMotor.Direction.REVERSE) {
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
+        if (backLeft.getDirection() == DcMotor.Direction.FORWARD) {
+            backLeft.setDirection(DcMotor.Direction.REVERSE);
         }
 
-        if (frontRight.getDirection() == DcMotor.Direction.FORWARD) {
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
+        if (frontRight.getDirection() == DcMotor.Direction.REVERSE) {
+            frontRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
         if (backRight.getDirection() == DcMotor.Direction.FORWARD) {
@@ -111,15 +133,16 @@ public class OpHelperClean extends OpMode {
             armMotor1.setDirection(DcMotor.Direction.REVERSE);
         }
 
+        //TODO configure arm motor direction
     }
 
     //reset drive encoders and return true when everything is at 0
     public boolean resetEncoders() {
-        frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        frontRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        backRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         return (frontLeft.getCurrentPosition() == 0 &&
                 backLeft.getCurrentPosition() == 0 &&
@@ -127,7 +150,7 @@ public class OpHelperClean extends OpMode {
                 backRight.getCurrentPosition() == 0);
 
     }
-
+    //TODO: CHECK WIRING
     //TODO: Implement cheesy drive or special drive code?
     public void setMotorPower(double leftPower, double rightPower) {//only accepts clipped values
         clipValues(leftPower, ComponentType.MOTOR);
@@ -137,28 +160,29 @@ public class OpHelperClean extends OpMode {
         backLeft.setPower(leftPower);
 
         frontRight.setPower(rightPower);
-        backRight.setPower(rightPower);
+        backRight.setPower(-rightPower);
     }
 
     //sets drive motors to encoder mode
     public void setToEncoderMode() {
 
-        frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
-        frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        frontRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        backRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
     //sets drive motors to run without encoders and use power
     public void setToWOEncoderMode() {
-        frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        frontLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
 
-        frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        frontRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
+    //encoder drive to go straight
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget = leftTarget;
@@ -170,12 +194,14 @@ public class OpHelperClean extends OpMode {
             setMotorPower(.4,.4);
         }
 
+
         if (hasReached()) {
             setMotorPower(0, 0);
             return true;//done traveling
         }
         return false;
     }
+
     //sets the encoder target position of drive motors
     public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
@@ -194,11 +220,13 @@ public class OpHelperClean extends OpMode {
     }
 
     //TODO: Run tests to determine the relationship between degrees turned and ticks
+
     public boolean setTargetValueTurn(double degrees) {
 
         int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
         leftTarget = encoderTarget;
         rightTarget = -encoderTarget;
+
         setTargetValueMotor();
         setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
@@ -246,12 +274,15 @@ public class OpHelperClean extends OpMode {
             zipLiner.setPosition(.2);
         }
     }
-    public void setZiplinePosition(double pos) {//Sets manually
-        zipLiner.setPosition(clipValues(pos, ComponentType.SERVO));
-    }
 
+    //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power) {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
+    }
+
+    public void setZipLiner(double pos)
+    {
+        zipLiner.setPosition(clipValues(pos,ComponentType.SERVO ));
     }
 
     //if true, then do turtle mode, otherwise, drive normally
@@ -266,17 +297,21 @@ public class OpHelperClean extends OpMode {
         } else{
             setMotorPower(rightPower, leftPower);
         }
+
     }
 
-    //will be over written by the class
+
     public void loop() {
     }
 
-    //put everything on brake
+
     public void stop(){
+
         setMotorPower(0,0);//brake the drive motors
         moveTapeMeasure(0);//brake the measuring tape motors
-        setZiplinePosition(false);//bring the zipliner back up
+        setZiplinePosition(true);//bring the zipliner back up
         setArmPivot(0);//brake the pivot arm
+
     }
+
 }
