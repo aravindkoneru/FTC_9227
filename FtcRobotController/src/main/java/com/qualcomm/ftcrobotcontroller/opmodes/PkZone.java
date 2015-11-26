@@ -126,7 +126,7 @@ public class PkZone extends OpModeHelperClean{
                 }
                 TimeDurationForTapeMeasure++;
                 break;*/
-                moveTapeMeasureWithEncoders(6);
+                //moveTapeMeasureWithEncoders(6);
             }
 
             case SEVENTH_STATE:

@@ -48,8 +48,8 @@ public class OpModeHelperClean extends OpMode {
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double
-            CIRCUMFERENCE_INCHES = 4 * Math.PI,
-            TICKS_PER_ROTATION = 1200 / 1.05,
+            CIRCUMFERENCE_INCHES = 39.5,
+            TICKS_PER_ROTATION = 3193,
             TICKS_PER_INCH = TICKS_PER_ROTATION / CIRCUMFERENCE_INCHES,
             TOLERANCE = 10;
 
@@ -58,9 +58,13 @@ public class OpModeHelperClean extends OpMode {
             ROBOT_WIDTH = 15.5,           // Width between centerline of wheels
             ROBOT_WHEEL_DISTANCE = 14;  // Distance between axles
 
+    private boolean servoR = false,
+                    servoL = false;
+
     public OpModeHelperClean() {
 
     }
+
 
     public void init() {
         //drive motors
@@ -86,32 +90,6 @@ public class OpModeHelperClean extends OpMode {
         resetEncoders(); //ensures that the encoders have reset
     }
 
-    public void moveTapeMeasure(double power){
-        armMotor2.setPower(power);
-        armMotor1.setPower(power);
-    }
-
-    //This is the code if we are using encoders with our tape measuere system
-    public void moveTapeMeasureWithEncoders(double Distance)
-    {
-        leftTarget = (int) (Distance* TICKS_PER_INCH);
-        rightTarget = leftTarget;
-        setTargetValueMotor();
-        moveTapeMeasure(.1);
-
-    }
-    //idk if we are using encoders
-
-
-    //This is the code if we are using encoders on our
-    public void armPivotWithEncoders(double pos)
-    {
-        leftTarget = (int) (pos* TICKS_PER_INCH);
-        rightTarget = leftTarget;
-        setTargetValueMotor();
-        setArmPivot(.1);
-    }
-
 
     //sets the proper direction for the motors
     public void setDirection() {
@@ -135,9 +113,10 @@ public class OpModeHelperClean extends OpMode {
         if(armMotor1.getDirection() == DcMotor.Direction.FORWARD){
             armMotor1.setDirection(DcMotor.Direction.REVERSE);
         }
-
-        //TODO configure arm motor direction
     }
+
+
+
 
     //reset drive encoders and return true when everything is at 0
     public boolean resetEncoders() {
@@ -152,18 +131,6 @@ public class OpModeHelperClean extends OpMode {
                 frontRight.getCurrentPosition() == 0 &&
                 backRight.getCurrentPosition() == 0);
 
-    }
-    //TODO: CHECK WIRING
-    //TODO: Implement cheesy drive or special drive code?
-    public void setMotorPower(double leftPower, double rightPower) {//only accepts clipped values
-        clipValues(leftPower, ComponentType.MOTOR);
-        clipValues(rightPower, ComponentType.MOTOR);
-
-        frontLeft.setPower(leftPower);
-        backLeft.setPower(leftPower);
-
-        frontRight.setPower(rightPower);
-        backRight.setPower(-rightPower);
     }
 
     //sets drive motors to encoder mode
@@ -185,6 +152,9 @@ public class OpModeHelperClean extends OpMode {
         backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
+
+
+
     //encoder drive to go straight
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
@@ -197,6 +167,23 @@ public class OpModeHelperClean extends OpMode {
             setMotorPower(.4,.4);
         }
 
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;//done traveling
+        }
+        return false;
+    }
+
+    //TODO: Run tests to determine the relationship between degrees turned and ticks
+    public boolean setTargetValueTurn(double degrees) {
+
+        int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
+        leftTarget = encoderTarget;
+        rightTarget = -encoderTarget;
+
+        setTargetValueMotor();
+        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -222,37 +209,91 @@ public class OpModeHelperClean extends OpMode {
                 Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
 
-    //TODO: Run tests to determine the relationship between degrees turned and ticks
 
-    public boolean setTargetValueTurn(double degrees) {
 
-        int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
-        leftTarget = encoderTarget;
-        rightTarget = -encoderTarget;
 
-        setTargetValueMotor();
-        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;//done traveling
+
+    public void activateLeft(boolean trigger){
+        if(trigger){
+            ziplinerL.setPosition(0);
+        } else{
+            ziplinerL.setPosition(1);
         }
-        return false;
     }
 
-    //simple debugging and info
-    public void basicTel() {
-        telemetry.addData("frontLeftPos: ", frontLeft.getCurrentPosition());
-        telemetry.addData("backLeftPos: ", backLeft.getCurrentPosition());
-        telemetry.addData("LeftTarget: ", leftTarget);
-
-        telemetry.addData("frontRightPos: ", frontRight.getCurrentPosition());
-        telemetry.addData("backRightPos: ", backRight.getCurrentPosition());
-        telemetry.addData("RightTarget: ", rightTarget);
-
+    public void activateRight(boolean trigger){
+        if(trigger){
+            zipLinerR.setPosition(0);
+        } else{
+            zipLinerR.setPosition(1);
+        }
     }
 
-    enum ComponentType {         //helps with clipValues
+    //Should only be used for Autons
+    public void setZipLinerL (double pos)
+    {
+        ziplinerL.setPosition(clipValues(pos, ComponentType.SERVO));
+    }
+
+    //Should only be used for Autons
+    public void setZipLinerR (double pos)
+    {
+        zipLinerR.setPosition(clipValues(pos,ComponentType.SERVO ));
+    }
+
+
+
+
+    //TODO: Calibrate this motor for the arm
+    public void setArmPivot(double power) {
+        armPivot.setPower(clipValues(power, ComponentType.MOTOR));
+    }
+
+
+
+
+    //if true, then do turtle mode, otherwise, drive normally
+    public void manualDrive(boolean turtleMode) {
+        setToWOEncoderMode();
+
+        double rightPower = gamepad1.right_stick_y;
+        double leftPower = gamepad1.left_stick_y;
+
+        if(turtleMode){
+            setMotorPower(rightPower*.5, leftPower*.5);
+        } else{
+            setMotorPower(rightPower, leftPower);
+        }
+    }
+
+    public void setMotorPower(double leftPower, double rightPower) {//only accepts clipped values
+        clipValues(leftPower, ComponentType.MOTOR);
+        clipValues(rightPower, ComponentType.MOTOR);
+
+        frontLeft.setPower(leftPower);
+        backLeft.setPower(leftPower);
+
+        frontRight.setPower(rightPower);
+        backRight.setPower(-rightPower);
+    }
+
+
+
+    public void moveTapeMeasure(double power){
+        armMotor2.setPower(power);
+        armMotor1.setPower(power);
+    }
+
+
+
+    public void loop() {
+    }
+
+
+
+
+    enum ComponentType {//helps with clipValues
         NONE,
         MOTOR,
         SERVO
@@ -269,70 +310,50 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-    //true = down; false = up
-    public void setZiplinePositionL (boolean down) {//slider values
-        if (down) {
-            ziplinerL.setPosition(.9);
-        } else {
-            ziplinerL.setPosition(.2);
+
+
+    //simple debugging and info
+    public void basicTel() {
+        telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
+        telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
+        telemetry.addData("03 LeftTarget: ", leftTarget);
+
+        telemetry.addData("04 frontRightPos: ", frontRight.getCurrentPosition());
+        telemetry.addData("05 backRightPos: ", backRight.getCurrentPosition());
+        telemetry.addData("06 RightTarget: ", rightTarget);
+
+        int tapeDirection = 0;
+        if(armMotor1.getPower() > 0 && armMotor2.getPower() > 0){
+            tapeDirection = 1;
+        } else if(armMotor1.getPower() < 0 && armMotor2.getPower() < 0){
+            tapeDirection = -1;
         }
-    }
+        telemetry.addData("07 Tape Measure: ", tapeDirection);
 
-    public void setZiplinePositionR (boolean down) {
-        if (down) {
-            zipLinerR.setPosition(.9);
-        } else {
-            zipLinerR.setPosition(.2);
+        int pivotPos = 0;
+        if(armPivot.getPower() < 0){
+            pivotPos = 1;
+        } else if(armPivot.getPower() > 0){
+            pivotPos = -1;
         }
+        telemetry.addData("08 Arm Pivot: ", pivotPos);
 
-    }
-
-
-
-    //TODO: Calibrate this motor for the arm
-    public void setArmPivot(double power) {
-        armPivot.setPower(clipValues(power, ComponentType.MOTOR));
-    }
-
-    public void setZipLinerL (double pos)
-    {
-        ziplinerL.setPosition(clipValues(pos, ComponentType.SERVO));
-    }
-
-    public void setZipLinerR (double pos)
-    {
-        zipLinerR.setPosition(clipValues(pos,ComponentType.SERVO ));
-    }
-
-
-    //if true, then do turtle mode, otherwise, drive normally
-    public void manualDrive(boolean turtleMode) {
-        setToWOEncoderMode();
-
-        double rightPower = gamepad1.right_stick_y;
-        double leftPower = gamepad1.left_stick_y;
-
-        if(turtleMode){
-            setMotorPower(rightPower*.5, leftPower*.5);
-        } else{
-            setMotorPower(rightPower, leftPower);
+        String activeZipLine = "zipR";
+        if(servoL){
+            activeZipLine = "zipL";
         }
 
-    }
+        telemetry.addData("09 Active Zip Line", activeZipLine);
 
-
-    public void loop() {
+        //telemetry.addData("10 ");
     }
 
 
     public void stop(){
-
-        setMotorPower(0,0);//brake the drive motors
-        moveTapeMeasure(0);//brake the measuring tape motors
-        setZiplinePositionR(true);//bring the zipliner back up
-        setZiplinePositionL(true);//bring the zipliner back up
+        setMotorPower(0, 0);//brake the drive motors
+        moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm
-
     }
+
 
 }

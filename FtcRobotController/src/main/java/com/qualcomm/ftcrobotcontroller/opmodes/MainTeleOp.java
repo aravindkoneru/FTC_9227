@@ -6,7 +6,6 @@ public class MainTeleOp extends OpModeHelperClean {
 
     }
 
-    //TODO: Talk to drive team about controller prefs/who controls what
     //Right now, all operator stuff is gamepad2 and driving is gamepad1
     //TODO: check wiring
 
@@ -21,29 +20,47 @@ public class MainTeleOp extends OpModeHelperClean {
             manualDrive(false);//move robot using joysticks
         }
 
+        if(gamepad1.a){
+            setMotorPower(-1,-1);
+        }else if(gamepad1.y){
+            setMotorPower(1,1);
+        }
+
         //Handle zipliner positions
         if(gamepad2.left_bumper){
-            setZiplinePositionL(true);
+            activateLeft(false);
         } else if(gamepad2.right_bumper){//brings it down
-            setZiplinePositionL(false);
+            activateRight(true);
+        }
+
+        if(gamepad2.left_trigger > 0){
+            activateLeft(true);
+        } else if(gamepad2.right_trigger > 0){
+            activateRight(false);
         }
 
         //handle arm pivot
-        if(gamepad2.dpad_up){
+        if(gamepad2.dpad_down){
             setArmPivot(-.2);
-        }else if(gamepad2.dpad_down){
+        }else if(gamepad2.dpad_up){
             setArmPivot(.2);
-        } else{
+        } else if(gamepad2.dpad_right){
+            setArmPivot(.8);
+        }
+        else{
             setArmPivot(0);
         }
 
         //handle the tape measure
         if(gamepad2.y) {
-            moveTapeMeasure(.2);
-        } else if(gamepad2.a){
             moveTapeMeasure(-.2);
+        } else if(gamepad2.a){
+            moveTapeMeasure(.2);
+        } else if(gamepad2.x){
+            moveTapeMeasure(.8);
         } else{
             moveTapeMeasure(0);
         }
+
     }
 }
