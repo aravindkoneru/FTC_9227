@@ -210,10 +210,6 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-
-
-
-
     public void activateLeft(boolean trigger){
         if(trigger){
             ziplinerL.setPosition(0);
@@ -279,12 +275,10 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-
     public void moveTapeMeasure(double power){
         armMotor2.setPower(power);
         armMotor1.setPower(power);
     }
-
 
 
     public void loop() {
@@ -360,14 +354,11 @@ public class OpModeHelperClean extends OpMode {
         return false;
     }
 
-
     public void stop(){
         setMotorPower(0, 0);//brake the drive motors
         moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm
     }
 
-
 }
-
 

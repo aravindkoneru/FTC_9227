@@ -19,7 +19,6 @@ public class MainTeleOp extends OpModeHelperClean {
         } else {
             manualDrive(false);//move robot using joysticks
         }
-
         if (gamepad1.a) {
             setMotorPower(-1, -1);
         } else if (gamepad1.y) {
@@ -47,6 +46,7 @@ public class MainTeleOp extends OpModeHelperClean {
         } else if (gamepad2.dpad_right) {
             setArmPivot(.8);
         } else {
+
             setArmPivot(0);
         }
 
@@ -58,6 +58,7 @@ public class MainTeleOp extends OpModeHelperClean {
         } else if (gamepad2.x) {
             moveTapeMeasure(.8);
         } else {
+
             moveTapeMeasure(0);
         }
 
