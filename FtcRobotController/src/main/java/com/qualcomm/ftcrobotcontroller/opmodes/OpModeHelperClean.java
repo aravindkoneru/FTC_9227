@@ -27,8 +27,9 @@ public class OpModeHelperClean extends OpMode {
             armPivot;
 
     //zipliner servo
-    Servo zipLinerR;
-    Servo ziplinerL;
+    Servo zipLinerR,
+            ziplinerL,
+            shitter;
 
 
     //target encoder position
@@ -84,10 +85,14 @@ public class OpModeHelperClean extends OpMode {
         zipLinerR = hardwareMap.servo.get("zipR");
         ziplinerL = hardwareMap.servo.get("zipL");
 
+        shitter = hardwareMap.servo.get("dump");
+
 
         setDirection(); //ensures the proper motor directions
 
         resetEncoders(); //ensures that the encoders have reset
+
+        dropShit(0);//make the shitter servo netural
     }
 
 
@@ -309,11 +314,21 @@ public class OpModeHelperClean extends OpMode {
         return finalval;
     }
 
+    public void dropShit(double flag){
+        if(flag == 1)
+            shitter.setPosition(1);
 
+        if(flag == -1)
+            shitter.setPosition(0);
 
+        if(flag == 0)
+            shitter.setPosition(SERVO_NEUTRAL);
+    }
 
     //simple debugging and info
     public void basicTel() {
+        telemetry.addData("00 tester: ", frontLeft.getConnectionInfo());
+
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("03 LeftTarget: ", leftTarget);
@@ -345,9 +360,8 @@ public class OpModeHelperClean extends OpMode {
 
         telemetry.addData("09 Active Zip Line", activeZipLine);
 
-        //telemetry.addData("10 ");
+        telemetry.addData("10 Shitter", shitter.getPosition());
     }
-
 
     public void stop(){
         setMotorPower(0, 0);//brake the drive motors
