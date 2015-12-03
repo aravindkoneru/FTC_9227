@@ -284,19 +284,13 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-
     public void moveTapeMeasure(double power){
         armMotor2.setPower(power);
         armMotor1.setPower(power);
     }
 
-
-
     public void loop() {
     }
-
-
-
 
     enum ComponentType {//helps with clipValues
         NONE,
@@ -313,6 +307,7 @@ public class OpModeHelperClean extends OpMode {
             finalval = Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
         return finalval;
     }
+
 
     public void dropShit(double flag){
         if(flag == 1)
@@ -368,6 +363,4 @@ public class OpModeHelperClean extends OpMode {
         moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm
     }
-
-
 }
