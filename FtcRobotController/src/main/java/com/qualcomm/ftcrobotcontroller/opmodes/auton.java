@@ -47,7 +47,7 @@ public class auton extends OpModeHelperClean{
                 break;
             }
             case FIRST_STATE: {
-                if (encoderDrive(-7935, -7935)) {
+                if (runStraight(-10, false)) {
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -60,7 +60,7 @@ public class auton extends OpModeHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (encoderDrive(-1275, 1275)) {
+                if (encoderDrive(-1275)) {
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -75,7 +75,7 @@ public class auton extends OpModeHelperClean{
             }
             case THIRD_STATE:
             {
-                if(encoderDrive(-1865,-1865)){
+                if(encoderDrive(-1865)){
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -90,7 +90,7 @@ public class auton extends OpModeHelperClean{
             }
             case FOURTH_STATE:
             {
-                if(encoderDrive(-2900,-2900)){
+                if(encoderDrive(-2900)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -105,7 +105,7 @@ public class auton extends OpModeHelperClean{
             }
             case FIFTH_STATE:
             {
-                if(encoderDrive(-1181, 1181)) {
+                if(encoderDrive(-1181)) {
                     rs = RunState.FIFTH_RESET;
                 }
                 break;
@@ -119,7 +119,7 @@ public class auton extends OpModeHelperClean{
 
             }
             case SIXTH_STATE: {
-                if (encoderDrive(-5000, -5000)) {
+                if (encoderDrive(-5000)) {
                     rs = RunState.STOP_STATE;
                 }
                 break;

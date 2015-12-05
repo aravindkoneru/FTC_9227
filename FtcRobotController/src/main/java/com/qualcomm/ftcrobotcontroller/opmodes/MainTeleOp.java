@@ -62,13 +62,13 @@ public class MainTeleOp extends OpModeHelperClean {
             moveTapeMeasure(0);
         }
 
-        if(gamepad1.dpad_left){
-            dropShit(-1);
-        } else if(gamepad1.dpad_right){
-            dropShit(1);
-        } else{
-            dropShit(0);
-        }
+//        if(gamepad1.dpad_left){
+//            dropShit(-1);
+//        } else if(gamepad1.dpad_right){
+//            dropShit(1);
+//        } else{
+//            dropShit(0);
+//        }
 
     }
 }
