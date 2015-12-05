@@ -288,9 +288,6 @@ public class OpModeHelperClean extends OpMode {
     public void loop() {
     }
 
-
-
-
     enum ComponentType {//helps with clipValues
         NONE,
         MOTOR,
@@ -306,6 +303,7 @@ public class OpModeHelperClean extends OpMode {
             finalval = Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
         return finalval;
     }
+
 
     public void dropShit(double flag){
         if(flag == 1)
@@ -404,3 +402,4 @@ public class OpModeHelperClean extends OpMode {
     }
 
 }
+
