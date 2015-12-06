@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-//TODO: Left and right Encoders are switched
+
 public class OpModeHelperClean extends OpMode {
 
 
@@ -29,7 +29,7 @@ public class OpModeHelperClean extends OpMode {
     //zipliner servo
     Servo zipLinerR,
             ziplinerL,
-            shitter;
+            dropper;
 
 
     //target encoder position
@@ -39,13 +39,13 @@ public class OpModeHelperClean extends OpMode {
     //SERVO CONSTANTS
     private final double
             SERVO_MAX = 1,
-            SERVO_MIN = - 1,
+            SERVO_MIN = -1,
             SERVO_NEUTRAL = 9.0 / 17;      //Stops the continuous servo
 
     //MOTOR RANGES
     private final double
             MOTOR_MAX = 1,
-            MOTOR_MIN = - 1;
+            MOTOR_MIN = -1;
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double
@@ -85,14 +85,19 @@ public class OpModeHelperClean extends OpMode {
         zipLinerR = hardwareMap.servo.get("zipR");
         ziplinerL = hardwareMap.servo.get("zipL");
 
-        // shitter = hardwareMap.servo.get("dump");
+        // dropper = hardwareMap.servo.get("dump");
 
 
         setDirection(); //ensures the proper motor directions
 
         resetEncoders(); //ensures that the encoders have reset
 
-        //dropShit(0);//make the shitter servo netural
+        //activateLeft(false);
+        //activateRight(false);
+
+
+
+        //dropDrop(0);//make the dropper servo netural
     }
 
 
@@ -110,17 +115,15 @@ public class OpModeHelperClean extends OpMode {
             frontRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
-        if (backRight.getDirection() == DcMotor.Direction.FORWARD) {
-            backRight.setDirection(DcMotor.Direction.REVERSE);
+        if (backRight.getDirection() == DcMotor.Direction.REVERSE) {
+            backRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
         //arm motor
-        if(armMotor1.getDirection() == DcMotor.Direction.FORWARD){
+        if (armMotor1.getDirection() == DcMotor.Direction.FORWARD) {
             armMotor1.setDirection(DcMotor.Direction.REVERSE);
         }
     }
-
-
 
 
     //reset drive encoders and return true when everything is at 0
@@ -158,18 +161,16 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-
-
     //encoder drive to go straight
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
-        rightTarget =  leftTarget;
+        rightTarget = leftTarget;
         setTargetValueMotor();
 
-        if(speed) {
-            setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
-        } else{
-            setMotorPower(.2,.2);
+        if (speed) {
+            setMotorPower(.8, .8);
+        } else {
+            setMotorPower(.4, .4);
         }
 
 
@@ -183,7 +184,7 @@ public class OpModeHelperClean extends OpMode {
     //TODO: Run tests to determine the relationship between degrees turned and ticks
     public boolean setTargetValueTurn(double degrees) {
 
-        int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
+        int encoderTarget = (int) (degrees / 360 * Math.PI * ROBOT_WIDTH * TICKS_PER_INCH);     //theta/360*PI*D
         leftTarget = encoderTarget;
         rightTarget = -encoderTarget;
 
@@ -214,43 +215,37 @@ public class OpModeHelperClean extends OpMode {
                 Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
 
-    public void activateLeft(boolean trigger){
-        if(trigger){
-            ziplinerL.setPosition(0);
-        } else{
+    public void activateLeft(boolean trigger) {
+        if (trigger) {
+            ziplinerL.setPosition(.4);
+        } else {
             ziplinerL.setPosition(1);
         }
     }
 
-    public void activateRight(boolean trigger){
-        if(trigger){
+    public void activateRight(boolean trigger) {
+        if (trigger) {
             zipLinerR.setPosition(0);
-        } else{
-            zipLinerR.setPosition(1);
+        } else {
+            zipLinerR.setPosition(.5);
         }
     }
 
     //Should only be used for Autons
-    public void setZipLinerL (double pos)
-    {
+    public void setZipLinerL(double pos) {
         ziplinerL.setPosition(clipValues(pos, ComponentType.SERVO));
     }
 
     //Should only be used for Autons
-    public void setZipLinerR (double pos)
-    {
-        zipLinerR.setPosition(clipValues(pos,ComponentType.SERVO ));
+    public void setZipLinerR(double pos) {
+        zipLinerR.setPosition(clipValues(pos, ComponentType.SERVO));
     }
-
-
 
 
     //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power) {
         armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
-
-
 
 
     //if true, then do turtle mode, otherwise, drive normally
@@ -260,9 +255,9 @@ public class OpModeHelperClean extends OpMode {
         double rightPower = gamepad1.right_stick_y;
         double leftPower = gamepad1.left_stick_y;
 
-        if(turtleMode){
-            setMotorPower(rightPower*.5, leftPower*.5);
-        } else{
+        if (turtleMode) {
+            setMotorPower(rightPower * .5, leftPower * .5);
+        } else {
             setMotorPower(rightPower, leftPower);
         }
     }
@@ -275,11 +270,11 @@ public class OpModeHelperClean extends OpMode {
         backLeft.setPower(leftPower);
 
         frontRight.setPower(rightPower);
-        backRight.setPower(-rightPower);
+        backRight.setPower(rightPower);
     }
 
 
-    public void moveTapeMeasure(double power){
+    public void moveTapeMeasure(double power) {
         armMotor2.setPower(power);
         armMotor1.setPower(power);
     }
@@ -294,7 +289,7 @@ public class OpModeHelperClean extends OpMode {
         SERVO
     }
 
-    //clips values so that they are within the range of the different compoenents
+    //clips values so that they are within the range of the different components
     public double clipValues(double initialValue, ComponentType type) {
         double finalval = 0;
         if (type == ComponentType.MOTOR)
@@ -304,16 +299,15 @@ public class OpModeHelperClean extends OpMode {
         return finalval;
     }
 
+    public void dropDrop(double flag) {
+        if (flag == 1)
+            dropper.setPosition(1);
 
-    public void dropShit(double flag){
-        if(flag == 1)
-            shitter.setPosition(1);
+        if (flag == -1)
+            dropper.setPosition(0);
 
-        if(flag == -1)
-            shitter.setPosition(0);
-
-        if(flag == 0)
-            shitter.setPosition(SERVO_NEUTRAL);
+        if (flag == 0)
+            dropper.setPosition(SERVO_NEUTRAL);
     }
 
     //simple debugging and info
@@ -330,35 +324,35 @@ public class OpModeHelperClean extends OpMode {
         telemetry.addData("06 RightTarget: ", rightTarget);
 
         int tapeDirection = 0;
-        if(armMotor1.getPower() > 0 && armMotor2.getPower() > 0){
+        if (armMotor1.getPower() > 0 && armMotor2.getPower() > 0) {
             tapeDirection = 1;
-        } else if (armMotor1.getPower() < 0 && armMotor2.getPower() < 0){
+        } else if (armMotor1.getPower() < 0 && armMotor2.getPower() < 0) {
             tapeDirection = -1;
         }
         telemetry.addData("07 Tape Measure: ", tapeDirection);
 
         int pivotPos = 0;
-        if(armPivot.getPower() < 0){
+        if (armPivot.getPower() < 0) {
             pivotPos = 1;
-        } else if(armPivot.getPower() > 0){
+        } else if (armPivot.getPower() > 0) {
             pivotPos = -1;
         }
         telemetry.addData("08 Arm Pivot: ", pivotPos);
 
         String activeZipLine = "zipR";
-        if(servoL){
+        if (servoL) {
             activeZipLine = "zipL";
         }
 
         telemetry.addData("09 Active Zip Line", activeZipLine);
 
-        //telemetry.addData("10 Shitter", shitter.getPosition());
+        //telemetry.addData("10 dropper", dropper.getPosition());
     }
 
-    public boolean encoderDrive(int target){
+    public boolean encoderDrive(int target) {
         leftTarget = target;
         rightTarget = target;
-        targetOne();
+        setTargetValueMotor();
         setMotorPower(.4, .4);
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -368,34 +362,22 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-
-
-    public void targetOne(){
-        frontLeft.setTargetPosition(leftTarget);
-        frontRight.setTargetPosition(rightTarget);
-    }
-
-
-    public boolean tankEncoders(int position){
+    public boolean tankEncoders(int position) {
         leftTarget = position;
         rightTarget = position;
 
-        targetOne();
-        setMotorPower(.4,.4);
+        setTargetValueMotor();
+        setMotorPower(.4, .4);
 
-        if(hasReached()){
-            setMotorPower(0,0);
+        if (hasReached()) {
+            setMotorPower(0, 0);
             return true;
         }
         return false;
     }
 
-    public boolean oneReach(){
-        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) < 30 &&
-                Math.abs(frontRight.getCurrentPosition() - rightTarget) < 30);
-    }
 
-    public void stop(){
+    public void stop() {
         setMotorPower(0, 0);//brake the drive motors
         moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm
