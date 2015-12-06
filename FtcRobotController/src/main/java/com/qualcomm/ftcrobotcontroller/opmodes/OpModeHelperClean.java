@@ -60,7 +60,7 @@ public class OpModeHelperClean extends OpMode {
             ROBOT_WHEEL_DISTANCE = 14;  // Distance between axles
 
     private boolean servoR = false,
-                    servoL = false;
+            servoL = false;
 
     public OpModeHelperClean() {
 
@@ -85,14 +85,14 @@ public class OpModeHelperClean extends OpMode {
         zipLinerR = hardwareMap.servo.get("zipR");
         ziplinerL = hardwareMap.servo.get("zipL");
 
-        shitter = hardwareMap.servo.get("dump");
+        // shitter = hardwareMap.servo.get("dump");
 
 
         setDirection(); //ensures the proper motor directions
 
         resetEncoders(); //ensures that the encoders have reset
 
-        dropShit(0);//make the shitter servo netural
+        //dropShit(0);//make the shitter servo netural
     }
 
 
@@ -163,13 +163,13 @@ public class OpModeHelperClean extends OpMode {
     //encoder drive to go straight
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
-        rightTarget = leftTarget;
+        rightTarget =  leftTarget;
         setTargetValueMotor();
 
-        if(speed){
+        if(speed) {
             setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
         } else{
-            setMotorPower(.4,.4);
+            setMotorPower(.2,.2);
         }
 
 
@@ -213,11 +213,6 @@ public class OpModeHelperClean extends OpMode {
                 Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE &&
                 Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
-
-
-
-
-
 
     public void activateLeft(boolean trigger){
         if(trigger){
@@ -289,6 +284,7 @@ public class OpModeHelperClean extends OpMode {
         armMotor1.setPower(power);
     }
 
+
     public void loop() {
     }
 
@@ -324,6 +320,7 @@ public class OpModeHelperClean extends OpMode {
     public void basicTel() {
         telemetry.addData("00 tester: ", frontLeft.getConnectionInfo());
 
+        telemetry.addData("LeftTarget", leftTarget);
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("03 LeftTarget: ", leftTarget);
@@ -335,7 +332,7 @@ public class OpModeHelperClean extends OpMode {
         int tapeDirection = 0;
         if(armMotor1.getPower() > 0 && armMotor2.getPower() > 0){
             tapeDirection = 1;
-        } else if(armMotor1.getPower() < 0 && armMotor2.getPower() < 0){
+        } else if (armMotor1.getPower() < 0 && armMotor2.getPower() < 0){
             tapeDirection = -1;
         }
         telemetry.addData("07 Tape Measure: ", tapeDirection);
@@ -355,7 +352,47 @@ public class OpModeHelperClean extends OpMode {
 
         telemetry.addData("09 Active Zip Line", activeZipLine);
 
-        telemetry.addData("10 Shitter", shitter.getPosition());
+        //telemetry.addData("10 Shitter", shitter.getPosition());
+    }
+
+    public boolean encoderDrive(int target){
+        leftTarget = target;
+        rightTarget = target;
+        targetOne();
+        setMotorPower(.4, .4);
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;//done traveling
+        }
+        return false;
+    }
+
+
+
+
+    public void targetOne(){
+        frontLeft.setTargetPosition(leftTarget);
+        frontRight.setTargetPosition(rightTarget);
+    }
+
+
+    public boolean tankEncoders(int position){
+        leftTarget = position;
+        rightTarget = position;
+
+        targetOne();
+        setMotorPower(.4,.4);
+
+        if(hasReached()){
+            setMotorPower(0,0);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean oneReach(){
+        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) < 30 &&
+                Math.abs(frontRight.getCurrentPosition() - rightTarget) < 30);
     }
 
     public void stop(){
@@ -363,4 +400,6 @@ public class OpModeHelperClean extends OpMode {
         moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm
     }
+
 }
+

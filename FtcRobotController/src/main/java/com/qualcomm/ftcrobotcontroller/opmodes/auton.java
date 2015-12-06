@@ -1,10 +1,11 @@
+
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 /**
  * Created by Tim on 10/25/2015.
  * copied by ruchir
  */
-public class BlueBlueRampAuton extends OpModeHelperClean{
+public class auton extends OpModeHelperClean{
 
 
     enum RunState{
@@ -19,6 +20,7 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
         LAST_STATE,
         FOURTH_RESET,
         FIFTH_STATE,
+        FIFTH_RESET,
         SIXTH_RESET,
         SIXTH_STATE,
         STOP_STATE
@@ -26,7 +28,7 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
     double x = 0;
 
     private RunState rs = RunState.RESET_STATE;
-    public BlueBlueRampAuton() {}
+    public auton() {}
 
 
     @Override
@@ -38,15 +40,14 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                resetEncoders();
-                rs=RunState.FIRST_STATE;
+                if(resetEncoders())
+                {
+                    rs=RunState.FIRST_STATE;
+                }
                 break;
             }
-            case FIRST_STATE:
-            {
-
-                if(runStraight(-40, false) )//&& debug)
-                {
+            case FIRST_STATE: {
+                if (runStraight(-10, false)) {
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -58,10 +59,8 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
                 }
                 break;
             }
-            case SECOND_STATE:
-            {
-                if(setTargetValueTurn(115))
-                {
+            case SECOND_STATE: {
+                if (encoderDrive(-1275)) {
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -76,10 +75,12 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case THIRD_STATE:
             {
-                if(runStraight(-35, false)){
+                if(encoderDrive(-1865)){
                     rs = RunState.THIRD_RESET;
                 }
                 break;
+
+
             }
             case THIRD_RESET: {
                 if (resetEncoders()) {
@@ -89,10 +90,11 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case FOURTH_STATE:
             {
-                if(setTargetValueTurn(75)){
+                if(encoderDrive(-2900)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
+
             }
             case FOURTH_RESET:
             {
@@ -103,27 +105,22 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case FIFTH_STATE:
             {
-                setZipLinerL(0.95);
-                rs = RunState.SIXTH_STATE;
-                break;
-            }
-            case SIXTH_STATE:
-            {
-                setArmPivot(-.2);
-
-                if(x > 100){
-                    setArmPivot(0);
-                    rs = RunState.LAST_STATE;
+                if(encoderDrive(-1181)) {
+                    rs = RunState.FIFTH_RESET;
                 }
-                x++;
                 break;
             }
-            case LAST_STATE:
+            case FIFTH_RESET:
             {
-                if(runStraight(-75, true))
-                {
+                if(resetEncoders()){
+                    rs = RunState.SIXTH_STATE;
+                }
+                break;
+
+            }
+            case SIXTH_STATE: {
+                if (encoderDrive(-5000)) {
                     rs = RunState.STOP_STATE;
-                    setArmPivot(0);
                 }
                 break;
             }

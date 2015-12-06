@@ -50,7 +50,7 @@ public class PkZone extends OpModeHelperClean{
                 break;
             }
             case FIRST_STATE: {
-            //go forward 23 inches
+                //go forward 23 inches
                 if (runStraight(-23, false)) {
                     rs = RunState.FIRST_RESET;
                 }
@@ -58,13 +58,13 @@ public class PkZone extends OpModeHelperClean{
             }
             case FIRST_RESET:
             {
-            //reset encoders
+                //reset encoders
                 resetEncoders();
                 rs = RunState.SECOND_STATE;
             }
             case SECOND_STATE:
             {
-            //turn 45 degrees to face the climber basket
+                //turn 45 degrees to face the climber basket
                 if (setTargetValueTurn(45)) {
                     rs = RunState.SECOND_RESET;
                 }
@@ -72,13 +72,13 @@ public class PkZone extends OpModeHelperClean{
             }
             case SECOND_RESET:
             {
-            //reset encdoers
+                //reset encdoers
                 resetEncoders();
                 rs = RunState.THIRD_STATE;
             }
             case THIRD_STATE:
             {
-            //go foward to the basket
+                //go foward to the basket
                 if (runStraight(-84, false)) {
                     rs = RunState.THIRD_RESET;
                 }
@@ -91,10 +91,10 @@ public class PkZone extends OpModeHelperClean{
             }
             case FOURTH_STATE:
             {//align with basket
-              if(setTargetValueTurn(45)){
-                  rs = RunState.FOURTH_RESET;
-              }
-              break;
+                if(setTargetValueTurn(45)){
+                    rs = RunState.FOURTH_RESET;
+                }
+                break;
             }
             case FOURTH_RESET:
             {//reset
@@ -116,9 +116,8 @@ public class PkZone extends OpModeHelperClean{
             //if we are not using ENCODERS
             case SIXTH_STATE:
             {
-            //extend tape masures
+                //extend tape masures
                 /*moveTapeMeasure(.1);
-
                 if(TimeDurationForTapeMeasure > 100){
                     moveTapeMeasure(0);
                     TimeDurationForTapeMeasure =0;
@@ -131,7 +130,7 @@ public class PkZone extends OpModeHelperClean{
 
             case SEVENTH_STATE:
             {
-            //setting down arm
+                //setting down arm
                 setArmPivot(-.1);
 
                 if(TimeDurationForArm > 150){
@@ -165,21 +164,18 @@ public class PkZone extends OpModeHelperClean{
             {
                 moveTapeMeasureWithEncoders(6);
             }
-
             case EIGHT_STATE:
             {
                 moveTapeMeasureWithEncoder(-6);
             }
-
             this is the code if we are using  encoders on our arm pivot thing
             case SEVENTH_STATE:
             {
-
             }
             */
             /*
-
              */
         }
     }
 }
+
