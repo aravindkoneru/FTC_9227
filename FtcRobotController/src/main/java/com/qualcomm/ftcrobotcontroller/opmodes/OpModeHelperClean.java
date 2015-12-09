@@ -362,12 +362,12 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-    public boolean tankEncoders(int position) {
-        leftTarget = position;
-        rightTarget = position;
+    public boolean tankEncoders(int position1, int position2) {
+        leftTarget = position1;
+        rightTarget = position2;
 
         setTargetValueMotor();
-        setMotorPower(.4, .4);
+        setMotorPower(.1, .1);
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -379,9 +379,28 @@ public class OpModeHelperClean extends OpMode {
 
     public void stop() {
         setMotorPower(0, 0);//brake the drive motors
-        moveTapeMeasure(.8);//brake the measuring tape motors
+        //moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm
     }
 
+    public void FixEncoderProblemIdea1(){//if its stops instantaneously
+        if (backLeft.isBusy()!= backRight.isBusy()){
+            stop();
+        }
+    }
+
+    public void FixEncoderProblemIdea2() //if FixEncoderProblemIdea1 fails, then try this
+    {
+        if (backLeft.isBusy()!= backRight.isBusy()){
+            //stop(); maybe needed but idk
+            tankEncoders(-1 * (backLeft.getCurrentPosition() - backRight.getCurrentPosition()), 0);
+            while(backLeft.isBusy()&&backRight.isBusy()){
+               if (Math.abs(backLeft.getCurrentPosition()-backRight.getCurrentPosition())>TOLERANCE){
+                    stop();
+                }
+            }
+     }
+
+    }
 }
 
