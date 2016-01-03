@@ -39,7 +39,7 @@ public class OpModeHelperClean extends OpMode {
     //SERVO CONSTANTS
     private final double
             SERVO_MAX = 1,
-            SERVO_MIN = - 1,
+            SERVO_MIN = -1,
             SERVO_NEUTRAL = 9.0 / 17;      //Stops the continuous servo
 
     //MOTOR RANGES
@@ -87,7 +87,6 @@ public class OpModeHelperClean extends OpMode {
 
         // shitter = hardwareMap.servo.get("dump");
 
-
         setDirection(); //ensures the proper motor directions
 
         resetEncoders(); //ensures that the encoders have reset
@@ -99,7 +98,7 @@ public class OpModeHelperClean extends OpMode {
     //sets the proper direction for the motors
     public void setDirection() {
         //drive motors
-        if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) { //Front Left = Front Right
+        if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) {
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
         }
         if (backLeft.getDirection() == DcMotor.Direction.FORWARD) {
@@ -124,6 +123,13 @@ public class OpModeHelperClean extends OpMode {
 
 
     //reset drive encoders and return true when everything is at 0
+    /*
+    Usage:
+
+        wrap in if(resetEncoders);
+
+        each iteration will attempt to reset the encoders and check if the values are actually reset.
+     */
     public boolean resetEncoders() {
         frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -161,13 +167,17 @@ public class OpModeHelperClean extends OpMode {
 
 
     //encoder drive to go straight
-    public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
+    /*
+    Usage:
+       wrap in if statement.
+     */
+    public boolean runStraight(double distance_in_inches, boolean fast) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget =  leftTarget;
         setTargetValueMotor();
 
-        if(speed) {
-            setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
+        if(fast) {
+            setMotorPower(.8, .8);
         } else{
             setMotorPower(.2,.2);
         }
@@ -251,8 +261,6 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
-
-
     //if true, then do turtle mode, otherwise, drive normally
     public void manualDrive(boolean turtleMode) {
         setToWOEncoderMode();
@@ -275,7 +283,7 @@ public class OpModeHelperClean extends OpMode {
         backLeft.setPower(leftPower);
 
         frontRight.setPower(rightPower);
-        backRight.setPower(-rightPower);
+        backRight.setPower(-rightPower);                //TODO: Why is this negative value?
     }
 
 
@@ -294,7 +302,7 @@ public class OpModeHelperClean extends OpMode {
         SERVO
     }
 
-    //clips values so that they are within the range of the different compoenents
+    //clips values so that they are within the range of the different components
     public double clipValues(double initialValue, ComponentType type) {
         double finalval = 0;
         if (type == ComponentType.MOTOR)
