@@ -52,23 +52,24 @@ public class MainTeleOp extends OpModeHelperClean {
 
         //handle the tape measure
         if (gamepad2.y) {
-            moveTapeMeasure(-.2);
-        } else if (gamepad2.a) {
             moveTapeMeasure(.2);
+        } else if (gamepad2.a) {
+            moveTapeMeasure(-.2);
         } else if (gamepad2.x) {
-            moveTapeMeasure(.8);
+            moveTapeMeasure(-.8);
         } else {
 
             moveTapeMeasure(0);
         }
 
-//        if(gamepad1.dpad_left){
-//            dropShit(-1);
-//        } else if(gamepad1.dpad_right){
-//            dropShit(1);
-//        } else{
-//            dropShit(0);
-//        }
+        if(gamepad1.left_bumper){
+            movePropeller(1);
+        } else if(gamepad1.right_bumper){
+            movePropeller(-1);
+        } else{
+            movePropeller(0);
+        }
+
 
     }
 }
