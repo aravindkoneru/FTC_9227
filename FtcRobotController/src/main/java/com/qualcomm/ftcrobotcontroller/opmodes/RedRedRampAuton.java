@@ -36,7 +36,7 @@ public class RedRedRampAuton extends OpModeHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                resetEncoders();
+                resetDriveEncoders();
                 rs=RunState.FIRST_STATE;
                 break;
             }
@@ -51,7 +51,7 @@ public class RedRedRampAuton extends OpModeHelperClean{
             }
             case FIRST_RESET: {
 
-                if(resetEncoders()){
+                if(resetDriveEncoders()){
                     rs = RunState.SECOND_STATE;
                 }
                 break;
@@ -67,7 +67,7 @@ public class RedRedRampAuton extends OpModeHelperClean{
 
             case SECOND_RESET:
             {
-                if(resetEncoders()){
+                if(resetDriveEncoders()){
                     rs = RunState.THIRD_STATE;
                 }
                 break;
@@ -80,7 +80,7 @@ public class RedRedRampAuton extends OpModeHelperClean{
                 break;
             }
             case THIRD_RESET: {
-                if (resetEncoders()) {
+                if (resetDriveEncoders()) {
                     rs = RunState.FOURTH_STATE;
                 }
                 break;
@@ -94,7 +94,7 @@ public class RedRedRampAuton extends OpModeHelperClean{
             }
             case FOURTH_RESET:
             {
-                if(resetEncoders()){
+                if(resetDriveEncoders()){
                     rs = RunState.FIFTH_STATE;
                 }
                 break;

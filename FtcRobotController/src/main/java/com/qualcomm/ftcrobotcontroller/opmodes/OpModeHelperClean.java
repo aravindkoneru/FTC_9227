@@ -24,7 +24,8 @@ public class OpModeHelperClean extends OpMode {
     //arm motors
     DcMotor armMotor1,
             armMotor2,
-            armPivot;
+            armPivot,
+            prop;
 
     //zipliner servo
     Servo zipLinerR,
@@ -50,22 +51,12 @@ public class OpModeHelperClean extends OpMode {
             CIRCUMFERENCE_INCHES = 39.5,
             TICKS_PER_ROTATION = 3193,
             TICKS_PER_INCH = TICKS_PER_ROTATION / CIRCUMFERENCE_INCHES,
-            TOLERANCE = 10;
+            TOLERANCE = 5;
 
     //ROBOT DIMENSIONS
-    private final double   //TODO: Measure these distances for 9927
-            ROBOT_WIDTH = 15.5,           // Width between centerline of wheels
-            ROBOT_WHEEL_DISTANCE = 14;  // Distance between axles
+    private final double ROBOT_WIDTH = 15.5;         // Width between centerline of wheels
 
-    private boolean servoR = false,
-            servoL = false;
-
-    DcMotor prop;
-
-    public OpModeHelperClean() {
-
-    }
-
+    private boolean servoL = false;
 
     public void init() {
         //drive motors
@@ -82,18 +73,20 @@ public class OpModeHelperClean extends OpMode {
         armMotor1 = hardwareMap.dcMotor.get("tm1");
         armMotor2 = hardwareMap.dcMotor.get("tm2");
 
+        //zip line motors
         zipLinerR = hardwareMap.servo.get("zipR");
         ziplinerL = hardwareMap.servo.get("zipL");
 
+        //Propeller / sweeper
         prop = hardwareMap.dcMotor.get("Propeller");
-
 
         setDirection(); //ensures the proper motor directions
 
-        resetEncoders(); //ensures that the encoders have reset
-
+        resetDriveEncoders(); //ensures that the encoders have reset
     }
 
+    //TODO: Make this a toggle command
+    //move the propeller
     public void movePropeller(int dir){
         if(dir == -1){
             prop.setPower(-1);
@@ -104,13 +97,13 @@ public class OpModeHelperClean extends OpMode {
         }
     }
 
-
     //sets the proper direction for the motors
     public void setDirection() {
         //drive motors
         if (frontLeft.getDirection() == DcMotor.Direction.REVERSE) {
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
         }
+
         if (backLeft.getDirection() == DcMotor.Direction.FORWARD) {
             backLeft.setDirection(DcMotor.Direction.REVERSE);
         }
@@ -119,8 +112,8 @@ public class OpModeHelperClean extends OpMode {
             frontRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
-        if (backRight.getDirection() == DcMotor.Direction.FORWARD) {
-            backRight.setDirection(DcMotor.Direction.REVERSE);
+        if (backRight.getDirection() == DcMotor.Direction.REVERSE) {
+            backRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
         //arm motor
@@ -129,18 +122,15 @@ public class OpModeHelperClean extends OpMode {
         }
     }
 
-
-
-
     //reset drive encoders and return true when everything is at 0
     /*
     Usage:
 
-        wrap in if(resetEncoders);
+        wrap in if(resetDriveEncoders);
 
         each iteration will attempt to reset the encoders and check if the values are actually reset.
      */
-    public boolean resetEncoders() {
+    public boolean resetDriveEncoders() {
         frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
@@ -151,12 +141,10 @@ public class OpModeHelperClean extends OpMode {
                 backLeft.getCurrentPosition() == 0 &&
                 frontRight.getCurrentPosition() == 0 &&
                 backRight.getCurrentPosition() == 0);
-
     }
 
     //sets drive motors to encoder mode
     public void setToEncoderMode() {
-
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
@@ -172,9 +160,6 @@ public class OpModeHelperClean extends OpMode {
         frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
-
-
-
 
     //encoder drive to go straight
     /*
@@ -192,7 +177,6 @@ public class OpModeHelperClean extends OpMode {
             setMotorPower(.2,.2);
         }
 
-
         if (hasReached()) {
             setMotorPower(0, 0);
             return true;//done traveling
@@ -200,15 +184,13 @@ public class OpModeHelperClean extends OpMode {
         return false;
     }
 
-    //TODO: Run tests to determine the relationship between degrees turned and ticks
     public boolean setTargetValueTurn(double degrees) {
-
         int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
         leftTarget = encoderTarget;
         rightTarget = -encoderTarget;
 
         setTargetValueMotor();
-        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+        setMotorPower(.7, .7);
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -228,9 +210,9 @@ public class OpModeHelperClean extends OpMode {
 
     //checks to see if the encoders are at the target within reason
     public boolean hasReached() {
-        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
-                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
-                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE &&
+        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE ||
+                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE ||
+                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE ||
                 Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
 
@@ -259,11 +241,8 @@ public class OpModeHelperClean extends OpMode {
     //Should only be used for Autons
     public void setZipLinerR (double pos)
     {
-        zipLinerR.setPosition(clipValues(pos,ComponentType.SERVO ));
+        zipLinerR.setPosition(clipValues(pos, ComponentType.SERVO));
     }
-
-
-
 
     //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power) {
@@ -293,17 +272,13 @@ public class OpModeHelperClean extends OpMode {
         backLeft.setPower(leftPower);
 
         frontRight.setPower(rightPower);
-        backRight.setPower(-rightPower);                //TODO: Why is this negative value?
+        backRight.setPower(rightPower);                //TODO: Make sure that this change didnt fuck things up
     }
 
 
     public void moveTapeMeasure(double power){
         armMotor2.setPower(power);
         armMotor1.setPower(power);
-    }
-
-
-    public void loop() {
     }
 
     enum ComponentType {//helps with clipValues
@@ -324,9 +299,6 @@ public class OpModeHelperClean extends OpMode {
 
     //simple debugging and info
     public void basicTel() {
-        telemetry.addData("00 tester: ", frontLeft.getConnectionInfo());
-
-        telemetry.addData("LeftTarget", leftTarget);
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("03 LeftTarget: ", leftTarget);
@@ -357,54 +329,14 @@ public class OpModeHelperClean extends OpMode {
         }
 
         telemetry.addData("09 Active Zip Line", activeZipLine);
-
-        //telemetry.addData("10 Shitter", shitter.getPosition());
     }
 
+    public OpModeHelperClean(){}
 
+    //Will be over written
+    public void loop() {}
 
-
-    public boolean encoderDrive(int target){
-        leftTarget = target;
-        rightTarget = target;
-        targetOne();
-        setMotorPower(.4, .4);
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;//done traveling
-        }
-        return false;
-    }
-
-
-
-
-    public void targetOne(){
-        frontLeft.setTargetPosition(leftTarget);
-        frontRight.setTargetPosition(rightTarget);
-    }
-
-
-    public boolean tankEncoders(int position){
-        leftTarget = position;
-        rightTarget = position;
-
-        targetOne();
-        setMotorPower(.4,.4);
-
-        if(hasReached()){
-            setMotorPower(0,0);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean oneReach(){
-        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) < 30 &&
-                Math.abs(frontRight.getCurrentPosition() - rightTarget) < 30);
-    }
-
-    public void stop(){
+    public void stop() {
         setMotorPower(0, 0);//brake the drive motors
         moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm

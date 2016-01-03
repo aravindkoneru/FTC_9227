@@ -40,7 +40,7 @@ public class GoStraight extends OpModeHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                if(resetEncoders())
+                if(resetDriveEncoders())
                 {
                     rs=RunState.FIRST_STATE;
                 }
@@ -54,7 +54,7 @@ public class GoStraight extends OpModeHelperClean{
             }
             case FIRST_RESET: {
 
-                if(resetEncoders()){
+                if(resetDriveEncoders()){
                     rs = RunState.STOP_STATE;
                 }
                 break;

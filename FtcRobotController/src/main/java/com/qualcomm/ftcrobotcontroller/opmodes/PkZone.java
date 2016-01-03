@@ -59,7 +59,7 @@ public class PkZone extends OpModeHelperClean{
             case FIRST_RESET:
             {
                 //reset encoders
-                resetEncoders();
+                resetDriveEncoders();
                 rs = RunState.SECOND_STATE;
             }
             case SECOND_STATE:
@@ -73,7 +73,7 @@ public class PkZone extends OpModeHelperClean{
             case SECOND_RESET:
             {
                 //reset encdoers
-                resetEncoders();
+                resetDriveEncoders();
                 rs = RunState.THIRD_STATE;
             }
             case THIRD_STATE:
@@ -86,7 +86,7 @@ public class PkZone extends OpModeHelperClean{
             }
             case THIRD_RESET:
             {//reset encdoers
-                resetEncoders();
+                resetDriveEncoders();
                 rs = RunState.FOURTH_STATE;
             }
             case FOURTH_STATE:
@@ -98,7 +98,7 @@ public class PkZone extends OpModeHelperClean{
             }
             case FOURTH_RESET:
             {//reset
-                resetEncoders();
+                resetDriveEncoders();
                 rs = RunState.FIFTH_STATE;
             }
             case FIFTH_STATE:
@@ -155,7 +155,7 @@ public class PkZone extends OpModeHelperClean{
             }
             case LAST_STATE:
             {
-                resetEncoders();
+                resetDriveEncoders();
                 stop();
             }
             /*

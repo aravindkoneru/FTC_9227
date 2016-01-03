@@ -5,10 +5,18 @@ public class MainTeleOp extends OpModeHelperClean {
     public MainTeleOp() {
 
     }
-
-    //Right now, all operator stuff is gamepad2 and driving is gamepad1
     //TODO: check wiring
 
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
+    //TODO: ITS ALWAYS A HARDWARE PROBLEM
 
     @Override
     public void loop() {
@@ -69,7 +77,5 @@ public class MainTeleOp extends OpModeHelperClean {
         } else{
             movePropeller(0);
         }
-
-
     }
 }

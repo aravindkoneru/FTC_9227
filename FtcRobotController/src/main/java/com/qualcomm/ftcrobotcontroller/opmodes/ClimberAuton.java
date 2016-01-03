@@ -39,7 +39,7 @@ public class ClimberAuton extends OpModeHelperClean {
             }
 
             case FRESET:{
-                if(resetEncoders()){
+                if(resetDriveEncoders()){
                     rs = RunState.SECOND;
                 }
                 break;
@@ -57,7 +57,7 @@ public class ClimberAuton extends OpModeHelperClean {
             }
 
             case TRESET:{
-                if (resetEncoders()){
+                if (resetDriveEncoders()){
                     rs = RunState.FOURTH;
                 }
                 break;

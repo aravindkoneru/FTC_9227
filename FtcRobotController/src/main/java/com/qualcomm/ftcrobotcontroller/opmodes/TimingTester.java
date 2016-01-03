@@ -11,7 +11,8 @@ public class TimingTester extends OpModeHelperClean {
     @Override
     public void loop(){
 
-        time=getRuntime();
         telemetry.addData("Time: ", time);
+
+        time=getRuntime();
     }
 }
