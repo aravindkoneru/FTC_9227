@@ -1,5 +1,8 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
+import android.graphics.Color;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -16,6 +19,9 @@ public class OpModeHelperClean extends OpMode {
     //left drive motors
     DcMotor frontLeft,
             backLeft;
+
+    DcMotor Propeller;
+
 
     //right drive motors
     DcMotor frontRight,
@@ -52,7 +58,7 @@ public class OpModeHelperClean extends OpMode {
             CIRCUMFERENCE_INCHES = 39.5,
             TICKS_PER_ROTATION = 3193,
             TICKS_PER_INCH = TICKS_PER_ROTATION / CIRCUMFERENCE_INCHES,
-            TOLERANCE = 10;
+            TOLERANCE = 15;
 
     //ROBOT DIMENSIONS
     private final double   //TODO: Measure these distances for 9927
@@ -61,6 +67,8 @@ public class OpModeHelperClean extends OpMode {
 
     private boolean servoR = false,
             servoL = false;
+
+    int TICKS_PER_REVOLUTION = 230;
 
     public OpModeHelperClean() {
 
@@ -84,6 +92,8 @@ public class OpModeHelperClean extends OpMode {
 
         zipLinerR = hardwareMap.servo.get("zipR");
         ziplinerL = hardwareMap.servo.get("zipL");
+
+        Propeller = hardwareMap.dcMotor.get("Propeller");
 
         // dropper = hardwareMap.servo.get("dump");
 
@@ -125,7 +135,6 @@ public class OpModeHelperClean extends OpMode {
         }
     }
 
-
     //reset drive encoders and return true when everything is at 0
     public boolean resetEncoders() {
         frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -138,12 +147,10 @@ public class OpModeHelperClean extends OpMode {
                 backLeft.getCurrentPosition() == 0 &&
                 frontRight.getCurrentPosition() == 0 &&
                 backRight.getCurrentPosition() == 0);
-
     }
 
     //sets drive motors to encoder mode
     public void setToEncoderMode() {
-
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
@@ -158,6 +165,8 @@ public class OpModeHelperClean extends OpMode {
 
         frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+
+        Propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
 
@@ -170,7 +179,7 @@ public class OpModeHelperClean extends OpMode {
         if (speed) {
             setMotorPower(.8, .8);
         } else {
-            setMotorPower(.4, .4);
+            setMotorPower(.5, .5);
         }
 
 
@@ -189,7 +198,7 @@ public class OpModeHelperClean extends OpMode {
         rightTarget = -encoderTarget;
 
         setTargetValueMotor();
-        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+        setMotorPower(1, 1);//TODO: Stalling factor that Libby brought up; check for adequate power
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -209,11 +218,13 @@ public class OpModeHelperClean extends OpMode {
 
     //checks to see if the encoders are at the target within reason
     public boolean hasReached() {
-        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
-                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
-                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE &&
+        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE ||
+                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE ||
+                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE ||
                 Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
+
+
 
     public void activateLeft(boolean trigger) {
         if (trigger) {
@@ -345,6 +356,7 @@ public class OpModeHelperClean extends OpMode {
         }
 
         telemetry.addData("09 Active Zip Line", activeZipLine);
+        telemetry.addData("Propeller",Propeller.getCurrentPosition());
 
         //telemetry.addData("10 dropper", dropper.getPosition());
     }
@@ -377,30 +389,34 @@ public class OpModeHelperClean extends OpMode {
     }
 
 
+
+
+
+    public boolean PropellerReset(){
+        int CurrentPos = Propeller.getCurrentPosition();
+        int TargetValue = (CurrentPos%TICKS_PER_REVOLUTION-100);//TODO: Bull shit constant, Needs to fix
+
+        Propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        Propeller.setTargetPosition(TargetValue);
+        Propeller.setPower(.6);
+        if(Math.abs(Propeller.getCurrentPosition())-TargetValue<=TOLERANCE){
+            Propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+            Propeller.setPower(0);
+            return true;
+        }
+        return false;
+    }
+
+
+
     public void stop() {
         setMotorPower(0, 0);//brake the drive motors
-        //moveTapeMeasure(.8);//brake the measuring tape motors
         setArmPivot(0);//brake the pivot arm
     }
 
-    public void FixEncoderProblemIdea1(){//if its stops instantaneously
-        if (backLeft.isBusy()!= backRight.isBusy()){
-            stop();
-        }
-    }
 
-    public void FixEncoderProblemIdea2() //if FixEncoderProblemIdea1 fails, then try this
-    {
-        if (backLeft.isBusy()!= backRight.isBusy()){
-            //stop(); maybe needed but idk
-            tankEncoders(-1 * (backLeft.getCurrentPosition() - backRight.getCurrentPosition()), 0);
-            while(backLeft.isBusy()&&backRight.isBusy()){
-               if (Math.abs(backLeft.getCurrentPosition()-backRight.getCurrentPosition())>TOLERANCE){
-                    stop();
-                }
-            }
-     }
 
-    }
 }
+
+
 

@@ -20,10 +20,9 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
         FOURTH_RESET,
         FIFTH_STATE,
         SIXTH_RESET,
-        SIXTH_STATE,
         STOP_STATE
     }
-    double x = 0;
+
 
     private RunState rs = RunState.RESET_STATE;
     public BlueBlueRampAuton() {}
@@ -60,7 +59,7 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case SECOND_STATE:
             {
-                if(setTargetValueTurn(115))
+                if(setTargetValueTurn(100))
                 {
                     rs = RunState.SECOND_RESET;
                 }
@@ -76,7 +75,7 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case THIRD_STATE:
             {
-                if(runStraight(-35, false)){
+                if(runStraight(-31.5, false)){
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -89,7 +88,7 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case FOURTH_STATE:
             {
-                if(setTargetValueTurn(75)){
+                if(setTargetValueTurn(122)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -103,27 +102,15 @@ public class BlueBlueRampAuton extends OpModeHelperClean{
             }
             case FIFTH_STATE:
             {
-                setZipLinerL(0.95);
-                rs = RunState.SIXTH_STATE;
-                break;
-            }
-            case SIXTH_STATE:
-            {
-                setArmPivot(-.2);
-
-                if(x > 100){
-                    setArmPivot(0);
-                    rs = RunState.LAST_STATE;
-                }
-                x++;
+                setZipLinerL(0.45);
+                rs = RunState.LAST_STATE;
                 break;
             }
             case LAST_STATE:
             {
-                if(runStraight(-75, true))
+                if(runStraight(-120, true))
                 {
                     rs = RunState.STOP_STATE;
-                    setArmPivot(0);
                 }
                 break;
             }

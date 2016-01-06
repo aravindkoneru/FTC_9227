@@ -42,7 +42,7 @@ public class GoStraight extends OpModeHelperClean{
             {
                 if(resetEncoders())
                 {
-                    rs=RunState.FIRST_STATE;
+                    rs=RunState.SECOND_STATE;
                 }
                 break;
             }
@@ -52,12 +52,19 @@ public class GoStraight extends OpModeHelperClean{
                 }
                 break;
             }
+
             case FIRST_RESET: {
 
                 if(resetEncoders()){
-                    rs = RunState.STOP_STATE;
+                    rs = RunState.SECOND_STATE;
                 }
                 break;
+            }
+            case SECOND_STATE:
+            {
+                if(setTargetValueTurn(90)){
+                    rs = RunState.STOP_STATE;
+                }
             }
             case STOP_STATE:
             {

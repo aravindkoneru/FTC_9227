@@ -7,8 +7,6 @@ public class MainTeleOp extends OpModeHelperClean {
     }
 
     //Right now, all operator stuff is gamepad2 and driving is gamepad1
-    //TODO: check wiring
-
 
     @Override
     public void loop() {
@@ -19,6 +17,7 @@ public class MainTeleOp extends OpModeHelperClean {
         } else {
             manualDrive(false);//move robot using joysticks
         }
+
         if (gamepad1.a) {
             setMotorPower(-1, -1);
         } else if (gamepad1.y) {
@@ -44,22 +43,40 @@ public class MainTeleOp extends OpModeHelperClean {
         } else if (gamepad2.dpad_up) {
             setArmPivot(.2);
         } else if (gamepad2.dpad_right) {
-            setArmPivot(1);
+            setArmPivot(.8);
         } else {
+
             setArmPivot(0);
         }
 
-        //handle the tape measure
-        if (gamepad2.y) {
-            moveTapeMeasure(.2);
-        } else if (gamepad2.a) {
+        if (gamepad2.y)
+        {
             moveTapeMeasure(-.2);
-        } else if (gamepad2.x) {
-            moveTapeMeasure(-.8);
-        } else {
+        } else if (gamepad2.a)
+        {
+            moveTapeMeasure(.2);
+        } else if (gamepad2.x)
+        {
+            moveTapeMeasure(.8);
+        } else
+        {
 
             moveTapeMeasure(0);
         }
+
+        if(gamepad1.right_bumper)
+        {
+            Propeller.setPower(.7);
+        }
+        else{
+            Propeller.setPower(0);
+        }
+
+        if(gamepad1.left_bumper){
+            PropellerReset();
+        }
+
+
 
     }
 }
