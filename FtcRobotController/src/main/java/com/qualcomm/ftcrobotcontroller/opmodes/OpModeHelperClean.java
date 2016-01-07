@@ -38,8 +38,7 @@ public class OpModeHelperClean extends OpMode {
     //SERVO CONSTANTS
     private final double
             SERVO_MAX = 1,
-            SERVO_MIN = -1,
-            SERVO_NEUTRAL = 9.0 / 17;      //Stops the continuous servo
+            SERVO_MIN = -1;
 
     //MOTOR RANGES
     private final double
@@ -51,10 +50,8 @@ public class OpModeHelperClean extends OpMode {
             CIRCUMFERENCE_INCHES = 39.5,
             TICKS_PER_ROTATION = 3193,
             TICKS_PER_INCH = TICKS_PER_ROTATION / CIRCUMFERENCE_INCHES,
-            TOLERANCE = 5;
-
-    //ROBOT DIMENSIONS
-    private final double ROBOT_WIDTH = 15.5;         // Width between centerline of wheels
+            TOLERANCE = 5,
+            ROBOT_WIDTH = 15.5;
 
     private boolean servoL = false;
 
@@ -85,18 +82,6 @@ public class OpModeHelperClean extends OpMode {
         resetDriveEncoders(); //ensures that the encoders have reset
     }
 
-    //TODO: Make this a toggle command
-    //move the propeller
-    public void movePropeller(int dir){
-        if(dir == -1){
-            prop.setPower(-1);
-        } if(dir == 1){
-            prop.setPower(1);
-        } else{
-            prop.setPower(0);
-        }
-    }
-
     //sets the proper direction for the motors
     public void setDirection() {
         //drive motors
@@ -122,14 +107,8 @@ public class OpModeHelperClean extends OpMode {
         }
     }
 
-    //reset drive encoders and return true when everything is at 0
-    /*
-    Usage:
 
-        wrap in if(resetDriveEncoders);
-
-        each iteration will attempt to reset the encoders and check if the values are actually reset.
-     */
+    //ENCODER MANIPULATION
     public boolean resetDriveEncoders() {
         frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -143,7 +122,6 @@ public class OpModeHelperClean extends OpMode {
                 backRight.getCurrentPosition() == 0);
     }
 
-    //sets drive motors to encoder mode
     public void setToEncoderMode() {
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -152,7 +130,6 @@ public class OpModeHelperClean extends OpMode {
         backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    //sets drive motors to run without encoders and use power
     public void setToWOEncoderMode() {
         frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
@@ -161,11 +138,8 @@ public class OpModeHelperClean extends OpMode {
         backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-    //encoder drive to go straight
-    /*
-    Usage:
-       wrap in if statement.
-     */
+
+    //ENCODER MOVEMENT
     public boolean runStraight(double distance_in_inches, boolean fast) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget =  leftTarget;
@@ -199,7 +173,6 @@ public class OpModeHelperClean extends OpMode {
         return false;
     }
 
-    //sets the encoder target position of drive motors
     public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
         backLeft.setTargetPosition(leftTarget);
@@ -208,7 +181,6 @@ public class OpModeHelperClean extends OpMode {
         backRight.setTargetPosition(rightTarget);
     }
 
-    //checks to see if the encoders are at the target within reason
     public boolean hasReached() {
         return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE ||
                 Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE ||
@@ -216,41 +188,7 @@ public class OpModeHelperClean extends OpMode {
                 Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
 
-    public void activateLeft(boolean trigger){
-        if(trigger){
-            ziplinerL.setPosition(0);
-        } else{
-            ziplinerL.setPosition(1);
-        }
-    }
-
-    public void activateRight(boolean trigger){
-        if(trigger){
-            zipLinerR.setPosition(0);
-        } else{
-            zipLinerR.setPosition(1);
-        }
-    }
-
-    //Should only be used for Autons
-    public void setZipLinerL (double pos)
-    {
-        ziplinerL.setPosition(clipValues(pos, ComponentType.SERVO));
-    }
-
-    //Should only be used for Autons
-    public void setZipLinerR (double pos)
-    {
-        zipLinerR.setPosition(clipValues(pos, ComponentType.SERVO));
-    }
-
-    //TODO: Calibrate this motor for the arm
-    public void setArmPivot(double power) {
-        armPivot.setPower(clipValues(power, ComponentType.MOTOR));
-    }
-
-
-    //if true, then do turtle mode, otherwise, drive normally
+    //DRIVER CONTROLS
     public void manualDrive(boolean turtleMode) {
         setToWOEncoderMode();
 
@@ -272,22 +210,64 @@ public class OpModeHelperClean extends OpMode {
         backLeft.setPower(leftPower);
 
         frontRight.setPower(rightPower);
-        backRight.setPower(rightPower);                //TODO: Make sure that this change didnt fuck things up
+        backRight.setPower(rightPower);
     }
 
+
+    //OPERATOR CONTROLS
+    public void activateLeft(boolean trigger){
+        if(trigger){
+            ziplinerL.setPosition(0);
+        } else{
+            ziplinerL.setPosition(1);
+        }
+    }
+
+    public void activateRight(boolean trigger){
+        if(trigger){
+            zipLinerR.setPosition(0);
+        } else{
+            zipLinerR.setPosition(1);
+        }
+    }
+
+    public void setArmPivot(double power) {
+        armPivot.setPower(clipValues(power, ComponentType.MOTOR));
+    }
 
     public void moveTapeMeasure(double power){
         armMotor2.setPower(power);
         armMotor1.setPower(power);
     }
 
-    enum ComponentType {//helps with clipValues
+    public void movePropeller(int dir){
+        if(dir == -1){
+            prop.setPower(-1);
+        } if(dir == 1){
+            prop.setPower(1);
+        } else{
+            prop.setPower(0);
+        }
+    }
+
+
+    //AUTON OPERATOR HELPER
+    public void setZipLinerL (double pos) {
+        ziplinerL.setPosition(clipValues(pos, ComponentType.SERVO));
+    }
+
+    public void setZipLinerR (double pos) {
+        zipLinerR.setPosition(clipValues(pos, ComponentType.SERVO));
+    }
+
+
+    //HELPER METHODS
+    enum ComponentType {
         NONE,
         MOTOR,
         SERVO
     }
 
-    //clips values so that they are within the range of the different components
     public double clipValues(double initialValue, ComponentType type) {
         double finalval = 0;
         if (type == ComponentType.MOTOR)
@@ -297,7 +277,8 @@ public class OpModeHelperClean extends OpMode {
         return finalval;
     }
 
-    //simple debugging and info
+
+    //DEBUG
     public void basicTel() {
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
@@ -327,15 +308,16 @@ public class OpModeHelperClean extends OpMode {
         if(servoL){
             activeZipLine = "zipL";
         }
-
         telemetry.addData("09 Active Zip Line", activeZipLine);
+
+        telemetry.addData("010 Propeller Encoders: ", prop.getCurrentPosition());
     }
 
     public OpModeHelperClean(){}
 
-    //Will be over written
     public void loop() {}
 
+    @Override
     public void stop() {
         setMotorPower(0, 0);//brake the drive motors
         moveTapeMeasure(.8);//brake the measuring tape motors
