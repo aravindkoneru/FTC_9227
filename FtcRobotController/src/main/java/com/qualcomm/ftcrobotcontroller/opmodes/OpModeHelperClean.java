@@ -398,14 +398,20 @@ public class OpModeHelperClean extends OpMode {
 
         Propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         Propeller.setTargetPosition(TargetValue);
-        Propeller.setPower(.6);
-        if(Math.abs(Propeller.getCurrentPosition())-TargetValue<=TOLERANCE){
-            Propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            Propeller.setPower(0);
-            return true;
+
+        while(Math.abs(Propeller.getCurrentPosition()-TargetValue)>=TOLERANCE) {
+            Propeller.setPower(.6);
+            Propeller.getCurrentPosition();
         }
-        return false;
+
+        Propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        Propeller.setPower(0);
+        return true;
+
     }
+
+
+
 
 
 
