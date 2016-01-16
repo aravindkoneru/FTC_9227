@@ -313,6 +313,32 @@ public class OpModeHelperClean extends OpMode {
         telemetry.addData("010 Propeller Encoders: ", prop.getCurrentPosition());
     }
 
+    private int turn=0,
+            targetPos;
+
+    public boolean resetProp(){
+        prop.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        int currentPos = prop.getCurrentPosition();
+        if (turn==0) {
+            if (targetPos==0) {
+                targetPos = currentPos + (280-(currentPos % 280));
+            }
+            prop.setTargetPosition(targetPos);
+            prop.setPower(.4);
+            if (targetPos - currentPos <= 6) {
+                resetPropellerEncoder();
+                prop.setPower(0);
+                turn = 1;
+                return true;
+            } else return false;
+        } else return false;
+    }
+
+    public void resetPropellerEncoder(){
+        prop.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        prop.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    }
+
     public OpModeHelperClean(){}
 
     public void loop() {}

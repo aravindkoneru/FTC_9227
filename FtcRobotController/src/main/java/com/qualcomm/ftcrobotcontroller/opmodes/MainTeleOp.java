@@ -77,5 +77,16 @@ public class MainTeleOp extends OpModeHelperClean {
             moveTapeMeasure(0);
         }
 
+        //handle the propeller
+        if(gamepad1.right_trigger > 0){
+            movePropeller(1);
+        } else if(gamepad1.left_trigger > 0){
+            movePropeller(-1);
+        } else if(gamepad1.b){
+            resetProp();
+        } else{
+            movePropeller(0);
+        }
+
     }
 }
